@@ -1,8 +1,18 @@
 import React from 'react'
 import profile from '../../../assets/profile.jpg';
 import { GrLogout } from "react-icons/gr";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../../Services/Operations/Auth';
 
 export default function ProfileDropDown({profileDisplay}) {
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+
+  function logoutHandler(){
+    dispatch(logout(navigate))
+  }
+  
   return (
     <div>
         {
@@ -26,7 +36,7 @@ export default function ProfileDropDown({profileDisplay}) {
             <hr className='mt-5 mb-2'/>
             <div className='flex gap-2 items-center'>
               <GrLogout className='text-xl'/>
-              <button>Logout</button>
+              <button onClick={logoutHandler}>Logout</button>
             </div>
             </div>
             )

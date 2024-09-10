@@ -18,21 +18,25 @@ import com.voting.college_election_voting.DTO.VoterRegisterDto;
 import com.voting.college_election_voting.Model.Candidates;
 import com.voting.college_election_voting.Model.OTP;
 import com.voting.college_election_voting.Model.Positions;
+import com.voting.college_election_voting.Model.Profile;
 import com.voting.college_election_voting.Model.Role;
 import com.voting.college_election_voting.Model.Students;
 import com.voting.college_election_voting.Model.Voters;
 import com.voting.college_election_voting.Repository.CandidatesRepo;
 import com.voting.college_election_voting.Repository.OTPRepo;
 import com.voting.college_election_voting.Repository.PositionsRepo;
+import com.voting.college_election_voting.Repository.ProfileRepo;
 import com.voting.college_election_voting.Repository.StudentRepo;
 import com.voting.college_election_voting.Repository.VotersRepo;
 
 import java.util.List;
 import java.util.Map;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,6 +63,9 @@ public class VotersService {
     private CandidatesRepo candidatesRepo;
     private PositionsRepo positionsRepo;
 
+    @Autowired
+    private ProfileRepo profileRepo;
+
     public VotersService(VotersRepo votersRepo,StudentRepo studentRepo,EmailService emailService,OTPRepo otpRepo,ModelMapper modelMapper,CloudinaryImageService cloudinaryImageService, AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo) {
         this.votersRepo = votersRepo;
         this.studentRepo=studentRepo;
@@ -75,9 +82,10 @@ public class VotersService {
 
 
 
+    @Transactional
     public RegisteredVoterResponse register(VoterRegisterDto voter, MultipartFile file) throws Exception{
-
-        Optional<Voters> DbVoter=votersRepo.findByRegisterNumber(voter.getRegisterNumber());
+        System.out.println("Profile Success");
+        Optional<Voters> DbVoter=votersRepo.findByRegisterNumber(voter.getProfile().getRegisterNumber());
         Optional<OTP> otp=otpRepo.findByEmail(voter.getEmail());
         if(DbVoter.isPresent()){
             throw new Exception("User already Registered");
@@ -92,6 +100,7 @@ public class VotersService {
             removeOtp(otp.get());
             throw new Exception("OTP has expired request for new OTP");
         }
+        
         Voters Voter=modelMapper.map(voter, Voters.class);
         String password=Voter.getPassword();
         Voter.setPassword(bCryptPasswordEncoder.encode(password));
@@ -142,7 +151,7 @@ public class VotersService {
                 newOtp.setEmail(email);
                 newOtp.setOtp(otp);
                 newOtp.setCreatedAt(LocalDateTime.now());
-                newOtp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
+                newOtp.setExpiresAt(LocalDateTime.now().plusMinutes(30));
                 otpRepo.save(newOtp);
             }
             sendMail(email,otp);
@@ -170,7 +179,7 @@ public class VotersService {
 
 
     public RegisteredVoterResponse login(VoterLoginDto loginDto) throws Exception {
-        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getRegisterNo(),loginDto.getPassword()));
+        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getIdentity(),loginDto.getPassword()));
 
         if(!authentication.isAuthenticated()){
             throw new Exception("Failed to Authenticate User");
@@ -210,10 +219,10 @@ public class VotersService {
                                                         .email(details.getEmail())
                                                         .firstName(details.getFirstName())
                                                         .lastName(details.getLastName())
-                                                        .Department(details.getDepartment())
+                                                        .Department(details.getProfile().getDepartment())
                                                         .mobileNumber(details.getMobileNumber())
                                                         .profilePicUrl(details.getProfilePicUrl())
-                                                        .registerNumber(details.getRegisterNumber())
+                                                        .registerNumber(details.getProfile().getRegisterNumber())
                                                         .build();
         return response;
     }

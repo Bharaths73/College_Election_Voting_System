@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VoterRegisterDto {
 
-    @NotBlank(message = "Register Number cannot be Blank")
-    private String registerNumber;
+    
 
     @NotBlank(message = "First Name cannot be Blank")
     private String firstName;
@@ -35,9 +34,8 @@ public class VoterRegisterDto {
     // @Pattern(regexp = "^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&#])[A-Za-z\\d@$!%?&#]{8,20}$", 
     //      message = "Password must be between 8 and 20 characters long, and include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
     private String password;
-
-    @NotBlank(message = "Department cannot be blank")
-    private String Department;
+    
+    private Profile profile;
 
     @NotBlank(message = "OTP cannot be blank")
     private String otp;

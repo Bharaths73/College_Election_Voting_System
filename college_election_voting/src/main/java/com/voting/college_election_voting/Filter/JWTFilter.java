@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.voting.college_election_voting.ExceptionsHandler.Exceptions.InvalidTokenException;
-import com.voting.college_election_voting.Service.AdminUserDetailsService;
-import com.voting.college_election_voting.Service.AdminUserPrinciple;
 import com.voting.college_election_voting.Service.JWTService;
 
 import jakarta.servlet.FilterChain;
@@ -27,16 +25,13 @@ public class JWTFilter extends OncePerRequestFilter{
 
     private JWTService jwtService;
 
-    private UserDetailsService adminDetailsService;
-
-    private UserDetailsService voterDetailsService;
+    private UserDetailsService userDetailsService;
 
     
 
-    public JWTFilter(JWTService jwtService, @Qualifier("adminUserDetailsService") UserDetailsService adminDetailsService,@Qualifier("voterDetailsService") UserDetailsService voterDetailsService) {
+    public JWTFilter(JWTService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
-        this.adminDetailsService = adminDetailsService;
-        this.voterDetailsService = voterDetailsService;
+        this.userDetailsService=userDetailsService;
     }
 
 
@@ -62,13 +57,7 @@ public class JWTFilter extends OncePerRequestFilter{
                     UserDetails userdetails;
                     String role = jwtService.extractUserRole(token); 
                     System.out.println(role);
-                    if("ROLE_ADMIN".equals(role)){
-                         userdetails=adminDetailsService.loadUserByUsername(username);
-                    }
-                    else{
-                        System.out.println(username);
-                        userdetails=voterDetailsService.loadUserByUsername(username);
-                    }
+                    userdetails=userDetailsService.loadUserByUsername(username);
 
                     if(jwtService.validateToken(token,userdetails)){
                         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(userdetails, null,userdetails.getAuthorities());

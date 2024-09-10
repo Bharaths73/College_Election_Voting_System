@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VoterLoginDto {
+public class Profile{
+    @NotBlank(message = "Register Number cannot be Blank")
+    private String registerNumber;
 
-    @NotBlank(message = "Register Number cannot be blank")
-    private String identity;
-
-    @NotBlank(message = "Password cannot be blank")
-    private String password;
+    @NotBlank(message = "Department cannot be blank")
+    private String Department;
 }

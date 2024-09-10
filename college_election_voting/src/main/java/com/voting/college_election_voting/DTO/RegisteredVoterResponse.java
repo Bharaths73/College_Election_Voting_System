@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RegisteredVoterResponse {
-    private String registerNumber;
     private String firstName;
     private String lastName;
     private String mobileNumber;
     private String email;
     private String Department;
+    private String registerNumber;
     private String profilePicUrl;
     private String proficePicId;
     private String role;

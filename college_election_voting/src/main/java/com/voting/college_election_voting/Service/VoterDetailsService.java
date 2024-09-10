@@ -25,8 +25,8 @@ public class VoterDetailsService implements UserDetailsService{
 
 
     @Override
-    public UserDetails loadUserByUsername(String regNo) throws UsernameNotFoundException {
-        Optional<Voters> voter=votersRepo.findByRegisterNumber(regNo);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Voters> voter=votersRepo.findByEmail(email);
         Voters user;
         if(voter.isPresent()){
             user=voter.get();

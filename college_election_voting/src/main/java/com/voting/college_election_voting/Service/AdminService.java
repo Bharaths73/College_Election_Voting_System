@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +20,10 @@ import com.voting.college_election_voting.DTO.AdminRegisteredDto;
 import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.VotesDto;
-import com.voting.college_election_voting.Model.Admin;
 import com.voting.college_election_voting.Model.Candidates;
 import com.voting.college_election_voting.Model.Positions;
 import com.voting.college_election_voting.Model.Voters;
 import com.voting.college_election_voting.Model.Votes;
-import com.voting.college_election_voting.Repository.AdminRepo;
 import com.voting.college_election_voting.Repository.CandidatesRepo;
 import com.voting.college_election_voting.Repository.PositionsRepo;
 import com.voting.college_election_voting.Repository.VotersRepo;
@@ -33,21 +32,18 @@ import com.voting.college_election_voting.Repository.VotesRepo;
 @Service
 public class AdminService {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private JWTService jwtService;
-    private AdminRepo adminRepo;
     private CandidatesRepo candidatesRepo;
     private PositionsRepo positionsRepo;
     private VotersRepo votersRepo;
     private ModelMapper modelMapper;
     private VotesRepo votesRepo;
 
-    
 
-    public AdminService(AuthenticationManager authenticationManager,JWTService jwtService,AdminRepo adminRepo,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo,VotersRepo votersRepo,ModelMapper modelMapper,VotesRepo votesRepo) {
+    public AdminService(AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo,VotersRepo votersRepo,ModelMapper modelMapper,VotesRepo votesRepo) {
         this.authenticationManager = authenticationManager;
         this.jwtService=jwtService;
-        this.adminRepo=adminRepo;
         this.candidatesRepo=candidatesRepo;
         this.positionsRepo=positionsRepo;
         this.votersRepo=votersRepo;
@@ -59,35 +55,36 @@ public class AdminService {
 
     public AdminRegisteredDto login(AdminLoginDto loginDto) throws Exception {
         System.out.println("Admin service");
-        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getIdentity(), loginDto.getPassword()));
 
-        if(!authentication.isAuthenticated()){
-            throw new Exception("Failed to authenticate");
-        }
-         // System.out.println("Admin authenticated");
-         AdminUserPrinciple adminUserPrinciple=(AdminUserPrinciple) authentication.getPrincipal();
+        // if(!authentication.isAuthenticated()){
+        //     throw new Exception("Failed to authenticate");
+        // }
+        //  // System.out.println("Admin authenticated");
+        //  AdminUserPrinciple adminUserPrinciple=(AdminUserPrinciple) authentication.getPrincipal();
 
-         String token=jwtService.generateToken(adminUserPrinciple, loginDto.getEmail());
+        //  String token=jwtService.generateToken(adminUserPrinciple, loginDto.getIdentity());
 
-         AdminRegisteredDto response=AdminRegisteredDto.builder()
-                                                       .token(token)
-                                                       .firstName(adminUserPrinciple.getFirstName())
-                                                       .lastName(adminUserPrinciple.getLastName())
-                                                       .email(adminUserPrinciple.getEmail())
-                                                       .profilePic(adminUserPrinciple.getProfilePic())
-                                                       .role(adminUserPrinciple.getAuthorities().toString())
-                                                       .build();
+         AdminRegisteredDto response=AdminRegisteredDto.builder().build();
+                                                    //    .build();
+                                                    //    .token(token)
+                                                    //    .firstName(adminUserPrinciple.getFirstName())
+                                                    //    .lastName(adminUserPrinciple.getLastName())
+                                                    //    .email(adminUserPrinciple.getEmail())
+                                                    //    .profilePic(adminUserPrinciple.getProfilePic())
+                                                    //    .role(adminUserPrinciple.getAuthorities().toString())
+                                                    //    .build();
          return response;
     }
 
 
 
     public AdminRegisteredDto getDetails(String email) throws Exception {
-        Optional<Admin> admin=adminRepo.findByEmail(email);
+        Optional<Voters> admin=votersRepo.findByEmail(email);
         if(!admin.isPresent()){
             throw new Exception("User Not Found");
         }
-        Admin details=admin.get();
+        Voters details=admin.get();
         AdminRegisteredDto response=AdminRegisteredDto.builder()
                                                         .email(details.getEmail())
                                                         .firstName(details.getFirstName())

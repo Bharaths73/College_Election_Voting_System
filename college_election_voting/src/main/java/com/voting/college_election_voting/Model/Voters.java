@@ -1,5 +1,6 @@
 package com.voting.college_election_voting.Model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @AllArgsConstructor
@@ -26,8 +29,7 @@ public class Voters {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false,unique = true)
-    private String registerNumber;
+    
 
     @Column(nullable = false,unique = false)
     private String firstName;
@@ -44,14 +46,9 @@ public class Voters {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false,unique = false)
-    private String Department;
     private String profilePicUrl;
 
-    private String proficePicId;
-
-    private boolean isVoted;
-
+    private String proficePicId; 
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -59,6 +56,10 @@ public class Voters {
     @OneToMany(mappedBy = "voter")
     @JsonBackReference
     private List<Votes> votes;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Profile profile;
 
     
     
@@ -98,14 +99,6 @@ public class Voters {
         this.email = email;
     }
 
-    public String getDepartment() {
-        return Department;
-    }
-
-    public void setDepartment(String department) {
-        Department = department;
-    }
-
     public String getProfilePicUrl() {
         return profilePicUrl;
     }
@@ -133,17 +126,10 @@ public class Voters {
     public Role getRole() {
         return role;
     }
+    
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public String getRegisterNumber() {
-        return registerNumber;
-    }
-
-    public void setRegisterNumber(String registerNumber) {
-        this.registerNumber = registerNumber;
     }
 
     public String getMobileNumber() {
@@ -154,20 +140,20 @@ public class Voters {
         this.mobileNumber = mobileNumber;
     }
 
-    public boolean isVoted() {
-        return isVoted;
-    }
-
-    public void setVoted(boolean isVoted) {
-        this.isVoted = isVoted;
-    }
-
     public String getProficePicId() {
         return proficePicId;
     }
 
     public void setProficePicId(String proficePicId) {
         this.proficePicId = proficePicId;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     

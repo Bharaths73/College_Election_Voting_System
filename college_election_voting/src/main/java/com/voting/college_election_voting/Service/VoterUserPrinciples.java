@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.voting.college_election_voting.Model.Profile;
 import com.voting.college_election_voting.Model.Role;
 import com.voting.college_election_voting.Model.Voters;
 
@@ -33,7 +34,7 @@ public class VoterUserPrinciples implements UserDetails{
 
     @Override
     public String getUsername() {
-        return voter.getRegisterNumber();
+        return voter.getProfile().getRegisterNumber();
     }
 
     public String getEmail(){
@@ -56,12 +57,16 @@ public class VoterUserPrinciples implements UserDetails{
         return voter.getLastName();
     }
 
+    public Profile getProfile(){
+        return voter.getProfile();
+    }
+
     public String getRegNo(){
-        return voter.getRegisterNumber();
+        return voter.getProfile().getRegisterNumber();
     }
 
     public String getDepartment(){
-        return voter.getDepartment();
+        return voter.getProfile().getDepartment();
     }
 
     public String getProfilePicId(){

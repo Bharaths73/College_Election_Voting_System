@@ -20,10 +20,15 @@ import com.voting.college_election_voting.DTO.CandidateDto;
 import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
+import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
 import com.voting.college_election_voting.DTO.VotesDto;
 import com.voting.college_election_voting.Model.Candidates;
 import com.voting.college_election_voting.Service.AdminService;
+import com.voting.college_election_voting.Service.VotersService;
+
+import jakarta.validation.Valid;
+
 import java.util.*;
 
 @RestController
@@ -32,16 +37,18 @@ import java.util.*;
 public class AdminController {
 
     private AdminService adminService;
+    private VotersService votersService;
 
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService,VotersService votersService) {
         this.adminService = adminService;
+        this.votersService=votersService;
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AdminLoginDto loginDto) throws Exception{
+    public ResponseEntity<?> login(@RequestBody @Valid VoterLoginDto loginDto) throws Exception{
         System.out.println("Admin controller");
-        AdminRegisteredDto adminRegisteredDto=adminService.login(loginDto);
+        RegisteredVoterResponse adminRegisteredDto=votersService.login(loginDto);
         return new ResponseEntity<>(adminRegisteredDto,HttpStatus.OK);
     }
 

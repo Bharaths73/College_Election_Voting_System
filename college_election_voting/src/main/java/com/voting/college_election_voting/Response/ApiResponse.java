@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class ApiResponse<T> {
 
-    @JsonFormat(pattern = "hh:mm:ss dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING, timezone = "UTC")
     private LocalDateTime timeStamp;
+
     private T data;
     private ErrorResponse error;
 
