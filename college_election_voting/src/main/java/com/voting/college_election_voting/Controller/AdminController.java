@@ -3,6 +3,7 @@ package com.voting.college_election_voting.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +54,7 @@ public class AdminController {
     }
 
     @PostMapping("/profile")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> profile(@RequestBody VoterRegisterDto registerDto) throws Exception{
         String email=registerDto.getEmail();
         AdminRegisteredDto details=adminService.getDetails(email);
@@ -60,8 +62,8 @@ public class AdminController {
     }
 
     @GetMapping("/voters")
-    public ResponseEntity<?> getVoters(@RequestParam(required = false,defaultValue = "0") Integer pageNo,@RequestParam(required = false,defaultValue = "10") Integer pageSize,@RequestParam(required = false,defaultValue = "registerNumber") String sortBy){
-       List<GetVotersDto> voters=adminService.getAllVoters(pageNo,pageSize,sortBy);
+    public ResponseEntity<?> getVoters(@RequestParam(required = false,defaultValue = "0") Integer pageNo,@RequestParam(required = false,defaultValue = "10") Integer pageSize){
+       List<GetVotersDto> voters=adminService.getAllVoters(pageNo,pageSize);
        return new ResponseEntity<>(voters,HttpStatus.OK);
     }
 

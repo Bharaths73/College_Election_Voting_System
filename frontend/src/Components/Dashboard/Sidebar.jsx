@@ -2,11 +2,13 @@ import React from 'react'
 import {navLinks} from '../../Data/NavLinksData';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import * as Icons from 'react-icons/md'
+import { useSelector } from 'react-redux';
 
 export const Sidebar = () => {
 
   const location=useLocation();
   const path=location.pathname;
+  const {role}=useSelector(state=>state.authentication)
 
   const matchRoute=(route)=>{
     const locationPath=matchPath({path:route},path)
@@ -19,6 +21,8 @@ export const Sidebar = () => {
         {
            navLinks.map((link,index)=>{
             const Icon=Icons[link.icon];
+            if(link.type && role!==link.type) return null
+                      
              return (
               <Link to={link.path} key={index} className={`flex gap-3 items-center mt-3 justify-start ${matchRoute(link.path) ? "bg-blue-200" : "bg-blue-500"} p-2 cursor-pointer`}>
                 <Icon size={25} className='ml-5 '/>

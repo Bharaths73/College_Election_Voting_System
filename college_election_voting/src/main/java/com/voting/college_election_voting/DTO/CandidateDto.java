@@ -21,6 +21,7 @@ public class CandidateDto {
     private String registerNumber;
     private Positions position;
     private Integer votes;
+    private boolean isCandidate; 
     private Integer pageNo;
     private Integer pageSize;
     private Integer totalPages;

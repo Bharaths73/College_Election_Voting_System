@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CandidateRegisterDto {
+    private String email;
     private String registerNumber;
     private String password;
     private PositionsDto position;

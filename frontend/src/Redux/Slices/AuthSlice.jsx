@@ -19,7 +19,8 @@ const token=localStorage.getItem("token") ? (JSON.parse(localStorage.getItem("to
 const initialState={
     token: token,
     registerData:null,
-    role: token!==null ? decodeJwtToken(token) : null
+    role: token!==null ? decodeJwtToken(token) : null,
+    user : localStorage.getItem("user") ? (JSON.parse(localStorage.getItem("user"))):null
 }
 
 console.log(initialState.role);
@@ -38,9 +39,12 @@ const AuthSlice=createSlice({
         },
         setRole:(state,action)=>{
             state.role=action.payload
+        },
+        setUser:(state,action)=>{
+            state.user=action.payload;
         }
     }
 })
 
-export const {setToken,setRegisterData,setRole}=AuthSlice.actions
+export const {setToken,setRegisterData,setRole,setUser}=AuthSlice.actions
 export default AuthSlice.reducer;

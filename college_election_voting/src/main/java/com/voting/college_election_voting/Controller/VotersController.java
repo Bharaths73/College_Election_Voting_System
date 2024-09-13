@@ -25,8 +25,8 @@ import com.voting.college_election_voting.Service.VotersService;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/api/voter")
+@CrossOrigin
 public class VotersController {
 
     private VotersService votersService;
@@ -75,6 +75,12 @@ public class VotersController {
     @PostMapping("/candidate")
     public ResponseEntity<?> registerCandidate(@RequestBody CandidateRegisterDto candidate) throws Exception{
         CandidateDto candidateDto=votersService.registerAsCandidate(candidate);
+        return new ResponseEntity<>(candidateDto,HttpStatus.OK);
+    }
+
+    @PostMapping("/iscandidate")
+    public ResponseEntity<?> confirmCandidate(@RequestBody CandidateRegisterDto candidate) throws Exception{
+        CandidateDto candidateDto=votersService.confirmCandidate(candidate);
         return new ResponseEntity<>(candidateDto,HttpStatus.OK);
     }
 

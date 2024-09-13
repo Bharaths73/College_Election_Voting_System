@@ -7,3 +7,18 @@ export const AuthApi={
     ADMIN_LOGIN_API:BASE_URL+"/admin/login",
     ADMIN_REGISTER_API:BASE_URL+"/admin/register"
 }
+
+export const candidateApi={
+    CANDIDATES_API:BASE_URL+"/voter/candidates",
+    IS_CANDIDATE_API:BASE_URL+"/voter/iscandidate",
+    CANDIDATE_API:BASE_URL+"/voter/candidate",
+}
+
+export const votersApi={
+    VOTERS_API:BASE_URL+"/admin/voters",
+}
+
+
+export const positionApi={
+    POSITIONS_API:BASE_URL+"/voter/positions"
+}

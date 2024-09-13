@@ -4,7 +4,7 @@ export const navLinks=[
         id: 1,
         name: "Analytics",
         path: "/dashboard/admin/analytics",
-        type: "ADMIN",
+        type: "ROLE_ADMIN",
         icon:"MdEqualizer"
     },
 
@@ -19,7 +19,7 @@ export const navLinks=[
         id: 3,
         name: "Votes",
         path: "/dashboard/admin/votes",
-        type: "ADMIN",
+        type: "ROLE_ADMIN",
         icon:"MdFrontHand"
     },
 
@@ -27,7 +27,7 @@ export const navLinks=[
         id: 4,
         name: "Voters",
         path: "/dashboard/admin/voters",
-        type: "ADMIN",
+        type: "ROLE_ADMIN",
         icon:"MdGroups"
     },
 
@@ -49,6 +49,7 @@ export const navLinks=[
         id: 7,
         name: "Candidate",
         path: "/dashboard/candidate",
+        type:"ROLE_VOTER",
         icon:"MdOutlinePersonAddAlt1"
     },
 
@@ -56,7 +57,7 @@ export const navLinks=[
         id: 8,
         name: "Vote",
         path: "/dashboard/vote",
-        type: "VOTER",
+        type:"ROLE_VOTER",
         icon:"MdHowToVote"
     },
 

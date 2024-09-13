@@ -7,12 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +33,7 @@ import com.voting.college_election_voting.Filter.JwtAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -46,12 +49,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception{
         return http.csrf(customizor->customizor.disable())
-                    .authorizeHttpRequests(req->req.requestMatchers("/api/admin/login","/api/admin/register","/api/voter/sendOtp","/api/voter/login","/api/voter/register")
+                    .authorizeHttpRequests(req->req.requestMatchers(HttpMethod.OPTIONS).permitAll().requestMatchers("/api/admin/login","/api/admin/register","/api/voter/sendOtp","/api/voter/login","/api/voter/register")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
                     // .exceptionHandling(auth->auth.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                    .httpBasic(Customizer.withDefaults())
+                    // .httpBasic(Customizer.withDefaults())
                     .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();

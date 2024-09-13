@@ -3,6 +3,7 @@ package com.voting.college_election_voting.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,29 +54,29 @@ public class AdminService {
 
 
 
-    public AdminRegisteredDto login(AdminLoginDto loginDto) throws Exception {
-        System.out.println("Admin service");
-        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getIdentity(), loginDto.getPassword()));
+    // public AdminRegisteredDto login(AdminLoginDto loginDto) throws Exception {
+    //     System.out.println("Admin service");
+    //     Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getIdentity(), loginDto.getPassword()));
 
-        // if(!authentication.isAuthenticated()){
-        //     throw new Exception("Failed to authenticate");
-        // }
-        //  // System.out.println("Admin authenticated");
-        //  AdminUserPrinciple adminUserPrinciple=(AdminUserPrinciple) authentication.getPrincipal();
+    //     // if(!authentication.isAuthenticated()){
+    //     //     throw new Exception("Failed to authenticate");
+    //     // }
+    //     //  // System.out.println("Admin authenticated");
+    //     //  AdminUserPrinciple adminUserPrinciple=(AdminUserPrinciple) authentication.getPrincipal();
 
-        //  String token=jwtService.generateToken(adminUserPrinciple, loginDto.getIdentity());
+    //     //  String token=jwtService.generateToken(adminUserPrinciple, loginDto.getIdentity());
 
-         AdminRegisteredDto response=AdminRegisteredDto.builder().build();
-                                                    //    .build();
-                                                    //    .token(token)
-                                                    //    .firstName(adminUserPrinciple.getFirstName())
-                                                    //    .lastName(adminUserPrinciple.getLastName())
-                                                    //    .email(adminUserPrinciple.getEmail())
-                                                    //    .profilePic(adminUserPrinciple.getProfilePic())
-                                                    //    .role(adminUserPrinciple.getAuthorities().toString())
-                                                    //    .build();
-         return response;
-    }
+    //      AdminRegisteredDto response=AdminRegisteredDto.builder().build();
+    //                                                 //    .build();
+    //                                                 //    .token(token)
+    //                                                 //    .firstName(adminUserPrinciple.getFirstName())
+    //                                                 //    .lastName(adminUserPrinciple.getLastName())
+    //                                                 //    .email(adminUserPrinciple.getEmail())
+    //                                                 //    .profilePic(adminUserPrinciple.getProfilePic())
+    //                                                 //    .role(adminUserPrinciple.getAuthorities().toString())
+    //                                                 //    .build();
+    //      return response;
+    // }
 
 
 
@@ -96,27 +97,25 @@ public class AdminService {
 
 
 
-    public List<GetVotersDto> getAllVoters(Integer pageNo,Integer pageSize,String sortBy) {
+    public List<GetVotersDto> getAllVoters(Integer pageNo,Integer pageSize) {
 
-        Pageable page=PageRequest.of(pageNo, pageSize,Sort.by(sortBy));
+        Pageable page=PageRequest.of(pageNo, pageSize);
 
         Page<Voters> voters=votersRepo.findAll(page);
-        List<GetVotersDto> voterRegisterDtos=new ArrayList<>();
-        voters.getContent().forEach(voter->{
-            GetVotersDto response=modelMapper.map(voter, GetVotersDto.class);
-            response.setPageNo(voters.getNumber());
-            response.setTotalPages(voters.getTotalPages());
-            response.setPageSize(voters.getSize());
-            response.setFirstPage(voters.isFirst());
-            response.setHasNextPage(voters.hasNext());
-            response.setLastPage(voters.isLast());
-            response.setTotalNoOfVoters(voters.getTotalElements());
-            response.setHasPreviousPage(voters.hasPrevious());
-            voterRegisterDtos.add(response);
-        });
+        List<GetVotersDto> voterRegisterDtos=voters.getContent().stream().filter(voter->"VOTER".equals(voter.getRole().name())).map(voter->
+            GetVotersDto.builder().firstName(voter.getFirstName()).lastName(voter.getLastName()).mobileNumber(voter.getMobileNumber()).email(voter.getEmail()).profilePic(voter.getProfilePicUrl()).registerNumber(voter.getProfile().getRegisterNumber()).pageNo(voters.getNumber()).department(voter.getProfile().getDepartment()).
+            totalPages(voters.getTotalPages()).
+            pageSize(voters.getSize()).
+           isFirstPage(voters.isFirst()).
+            hasNextPage(voters.hasNext()).
+            isLastPage(voters.isLast()).
+            totalNoOfVoters(voters.getTotalElements()).
+            hasPreviousPage(voters.hasPrevious()).build()
+        ).collect(Collectors.toList());
 
-       
-
+        List<Voters> dummy=voters.getContent();
+        dummy.forEach(voter->System.out.println(voter.getRole()));
+        System.out.println(voterRegisterDtos.toString());
         return voterRegisterDtos;
     }
 

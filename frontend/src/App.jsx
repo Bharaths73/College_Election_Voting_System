@@ -16,6 +16,8 @@ import Candidate from './Pages/Candidate';
 import Settings from './Pages/Settings';
 import Error from './Pages/Error';
 import Register from './Pages/Register';
+import Public from './Components/Auth/Public';
+import Private from './Components/Auth/Private';
 
 function App() {
 
@@ -23,24 +25,24 @@ function App() {
     <div className=''>
       <Navbar/>
       <Routes>
-      <Route path='/' element={<Login/>}/>
-      <Route path='/admin/login' element={<Login/>}/>
+      <Route path='/' element={<Public><Login/></Public>}/>
+      <Route path='/admin/login' element={<Public><Login/></Public>}/>
       {/* <Route path='/otp' element={<Otp/>}/>*/}
-      <Route path='/register' element={<Register/>}/>
+      <Route path='/register' element={<Public><Register/></Public>}/>
       <Route path='/admin/register' element={<Register/>}/>
       {/* <Route path='/forgot-password' element={}/> */}
       {/* <Route path='/update-password' element={}/> */}
       <Route path='*' element={<Error/>}/>
-      <Route element={<Dashboard/>}>
-          <Route path='dashboard/admin/analytics' element={<Analytics/>}/>
-          <Route path='dashboard/profile' element={<Profile/>}/>
-          <Route path='dashboard/candidates' element={<Candidates/>}/>
-          <Route path='dashboard/positions' element={<Positions/>}/>
-          <Route path='dashboard/admin/votes' element={<Votes/>}/>
-          <Route path='dashboard/admin/voters' element={<Voters/>}/>
-          <Route path='dashboard/vote' element={<Vote/>}/>
-          <Route path='dashboard/candidate' element={<Candidate/>}/>
-          <Route path='dashboard/settings' element={<Settings/>}/>
+      <Route element={<Private><Dashboard/></Private>}>
+          <Route path='dashboard/admin/analytics' element={<Private><Analytics/></Private>}/>
+          <Route path='dashboard/profile' element={<Private><Profile/></Private>}/>
+          <Route path='dashboard/candidates' element={<Private><Candidates/></Private>}/>
+          <Route path='dashboard/positions' element={<Private><Positions/></Private>}/>
+          <Route path='dashboard/admin/votes' element={<Private><Votes/></Private>}/>
+          <Route path='dashboard/admin/voters' element={<Private><Voters/></Private>}/>
+          <Route path='dashboard/vote' element={<Private><Vote/></Private>}/>
+          <Route path='dashboard/candidate' element={<Private><Candidate/></Private>}/>
+          <Route path='dashboard/settings' element={<Private><Settings/></Private>}/>
       </Route> 
       </Routes>
     </div>

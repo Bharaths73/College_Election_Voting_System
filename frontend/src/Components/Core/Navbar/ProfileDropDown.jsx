@@ -1,13 +1,14 @@
 import React from 'react'
 import profile from '../../../assets/profile.jpg';
 import { GrLogout } from "react-icons/gr";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../Services/Operations/Auth';
 
 export default function ProfileDropDown({profileDisplay}) {
   const dispatch=useDispatch()
   const navigate=useNavigate()
+  const {user,role}=useSelector(state=>state.authentication)
 
   function logoutHandler(){
     dispatch(logout(navigate))
@@ -23,13 +24,21 @@ export default function ProfileDropDown({profileDisplay}) {
 
             <div className='flex gap-5 items-center'>
             <div>
-              <img src={profile} className='w-20 h-20 border-white rounded-full'/>
+              <img src={user.profilePicUrl} className='w-20 h-20 border-white rounded-full'/>
             </div>
 
             <div className='flex flex-col gap-y-1 text-xs'>
-              <p className=' font-bold text-base'>Bharath S</p>
-              <p className=' font-bold'>PES1PG22CA044</p>
-              <p className=' font-bold text-wrap'>Master of Computer Applications</p>
+              <p className=' font-bold text-base'>{user.firstName+" "}{user.lastName}</p>
+              {
+                role!=="ROLE_ADMIN" ? (
+                   <div className='flex flex-col gap-y-1'>
+                     <p className=' font-bold'>{user.registerNumber}</p>
+                     <p className=' font-bold text-wrap'>{user.department}</p>
+                   </div>
+                ) : (
+                  <p className=' font-bold'>Admin</p>
+                )
+              }
             </div>
             </div>
 

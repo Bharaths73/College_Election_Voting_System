@@ -189,7 +189,7 @@ public class VotersService {
         String email=voter.getEmail();
         // String otp=generateOTP();
         // checkInDb(email);
-        String token=jwtService.generateToken(voter,voter.getRegNo());
+        String token=jwtService.generateToken(voter,voter.getEmail());
         RegisteredVoterResponse registeredVoterResponse=RegisteredVoterResponse
                                                         .builder()
                                                         .token(token)
@@ -201,7 +201,7 @@ public class VotersService {
                                                         .proficePicId(voter.getProfilePicId())
                                                         .role(voter.getAuthorities().toString())
                                                         .registerNumber(voter.getRegNo())
-                                                        .Department(voter.getDepartment())
+                                                        .department(voter.getDepartment())
                                                         .build();
 
         return registeredVoterResponse;
@@ -219,7 +219,7 @@ public class VotersService {
                                                         .email(details.getEmail())
                                                         .firstName(details.getFirstName())
                                                         .lastName(details.getLastName())
-                                                        .Department(details.getProfile().getDepartment())
+                                                        .department(details.getProfile().getDepartment())
                                                         .mobileNumber(details.getMobileNumber())
                                                         .profilePicUrl(details.getProfilePicUrl())
                                                         .registerNumber(details.getProfile().getRegisterNumber())
@@ -278,7 +278,7 @@ public class VotersService {
         if(candi.isPresent()){
             throw new UsernameNotFoundException("Candidate already Registered");
         }
-        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(candidate.getRegisterNumber(), candidate.getPassword()));
+        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(candidate.getEmail(), candidate.getPassword()));
 
         if(!authentication.isAuthenticated()){
             throw new Exception("Failed to Authenticate User");
@@ -291,6 +291,10 @@ public class VotersService {
             throw new Exception("Voter not found");
         }
 
+        if(candidate.getPosition().getId()==null){
+            throw new Exception("Position is required");
+        }
+
         Optional<Positions> position=positionsRepo.findById(candidate.getPosition().getId());
 
         if(!position.isPresent()){
@@ -299,6 +303,8 @@ public class VotersService {
         Positions positions=position.get();
         Voters voter=authCandidate.get();
         Candidates candidates=modelMapper.map(voter, Candidates.class);
+        candidates.setDepartment(voter.getProfile().getDepartment());
+        candidates.setRegisterNumber(voter.getProfile().getRegisterNumber());
         candidates.setPosition(positions);
         List<Candidates> posCandidates=positions.getCandidates();
         // if(posCandidates==null){
@@ -307,8 +313,21 @@ public class VotersService {
         posCandidates.add(candidates);
         positions.setCandidates(posCandidates);
         Candidates savedCandidates=candidatesRepo.save(candidates);
-        CandidateDto candidateDto=modelMapper.map(savedCandidates, CandidateDto.class);
+        CandidateDto candidateDto=CandidateDto.builder().department(savedCandidates.getDepartment()).firstName(savedCandidates.getFirstname()).lastName(savedCandidates.getLastName()).position(savedCandidates.getPosition()).profilePic(savedCandidates.getProfilePicUrl()).registerNumber(savedCandidates.getRegisterNumber()).build();
         return candidateDto;
+    }
+
+
+
+    public CandidateDto confirmCandidate(CandidateRegisterDto candidate) throws Exception {
+        Optional<Candidates> candi=candidatesRepo.findByRegisterNumber(candidate.getRegisterNumber());
+
+        if(candi.isPresent()){
+            Candidates savedCandidates=candi.get();
+            CandidateDto candidateDto=CandidateDto.builder().department(savedCandidates.getDepartment()).firstName(savedCandidates.getFirstname()).lastName(savedCandidates.getLastName()).position(savedCandidates.getPosition()).profilePic(savedCandidates.getProfilePicUrl()).registerNumber(savedCandidates.getRegisterNumber()).isCandidate(true).build();
+            return candidateDto;
+        }
+        return CandidateDto.builder().isCandidate(false).build();
     }
     
     

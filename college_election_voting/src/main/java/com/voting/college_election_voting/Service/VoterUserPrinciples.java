@@ -34,7 +34,7 @@ public class VoterUserPrinciples implements UserDetails{
 
     @Override
     public String getUsername() {
-        return voter.getProfile().getRegisterNumber();
+        return voter.getEmail();
     }
 
     public String getEmail(){
