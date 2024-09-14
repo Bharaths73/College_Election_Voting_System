@@ -30,7 +30,10 @@ import com.voting.college_election_voting.Repository.PositionsRepo;
 import com.voting.college_election_voting.Repository.VotersRepo;
 import com.voting.college_election_voting.Repository.VotesRepo;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
+@Transactional
 public class AdminService {
 
     private final AuthenticationManager authenticationManager;
@@ -123,6 +126,9 @@ public class AdminService {
 
     public PositionsDto addPosition(PositionsDto position) throws Exception {
         System.out.println("Request position is "+position.toString());
+        if(position.getPositionName().isBlank()){
+            throw new Exception("Position name cannot be blank");
+        }
         List<Positions> isPosAvailabe=positionsRepo.findAll().stream().filter(pos->pos.getPositionName().equalsIgnoreCase(position.getPositionName().trim())).collect(Collectors.toList());
 
         if(!isPosAvailabe.isEmpty()){
@@ -130,20 +136,25 @@ public class AdminService {
         }
         Positions positions=modelMapper.map(position, Positions.class);
         System.out.println(positions.toString());
+        positions.setPositionName(positions.getPositionName().trim());
         Positions savedPosition=positionsRepo.save(positions);
+        
         PositionsDto positionsDto=modelMapper.map(savedPosition, PositionsDto.class);
         return positionsDto;
     }
 
 
-    public void deletePosition(Integer id) throws Exception{
+    public List<PositionsDto> deletePosition(Integer id) throws Exception{
         Positions position=positionsRepo.findById(id).orElseThrow(()->new Exception("Position not found to delete"));
         positionsRepo.deleteById(id);
+        List<Positions> positions=positionsRepo.findAll();
+        List<PositionsDto> positionsDtos=positions.stream().map(pos->modelMapper.map(pos, PositionsDto.class)).collect(Collectors.toList());
+        return positionsDtos;
     }
 
-    public void deleteCandidate(Integer id) throws Exception{
-        Candidates position=candidatesRepo.findById(id).orElseThrow(()->new Exception("Candidate not found to delete"));
-        candidatesRepo.deleteById(id);
+    public void deleteCandidate(String id) throws Exception{
+        Candidates candidate=candidatesRepo.findByRegisterNumber(id).orElseThrow(()->new Exception("Candidate not found to delete"));
+        candidatesRepo.deleteByRegisterNumber(id);
     }
 
 

@@ -58,3 +58,16 @@ export const regsiterAsCandidates=async(token,data)=>{
     toast.dismiss(toastId)
     return result;
 }
+
+export const deleteCand=async(token,id)=>{
+    const toastId=toast.loading("Deleting candidate...")
+    try {
+        const response=await ApiConnector("DELETE",candidateApi.DELETE_CANDIDATE_API+`/${id}`,null,{Authorization:`Bearer ${token}`})
+        console.log("Candidate delete response is ",response.data.data);
+        toast.success("Candidate deleted successfully")
+    } catch (error) {
+        console.log("Failed to delete candidate try again ",error);
+        toast.error("Failed to delete candidate try again ",error.response.data.error)
+    }
+    toast.dismiss(toastId)
+}

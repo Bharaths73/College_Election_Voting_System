@@ -95,8 +95,8 @@ export default function Candidate() {
 
   return (
     <div className='ml-5 mr-5 pb-10'>
-      <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Register Yourself as Candidate</h1>
-      <div className='flex w-full justify-center mt-20'>
+      <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-1'>Register Yourself as Candidate</h1>
+      <div className='flex w-full justify-center mt-10'>
       {
          isCandidate ? (
            <div className=' flex flex-col gap-5 justify-center'>

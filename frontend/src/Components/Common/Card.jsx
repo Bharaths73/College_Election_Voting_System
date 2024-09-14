@@ -1,8 +1,9 @@
 import React from 'react';
 import { MdDeleteForever,MdModeEditOutline } from "react-icons/md";
 import { useSelector } from 'react-redux';
+import {Link} from 'react-router-dom';
 
-export default function Card({collection,identity}) {
+export default function Card({collection,identity,edit,deleteFunc,setConfirmationModal}) {
     const {role}=useSelector(state=>state.authentication)
   return (
     <div className='bg-slate-300 p-3 rounded-lg shadow-lg'>
@@ -43,9 +44,10 @@ export default function Card({collection,identity}) {
             
         </div>
             ) : (
-                <div className='p-3'>
-                    <p className='sm:text-2xl text-xl font-semibold'>{collection?.positionName}</p>
-                </div>
+                    
+                    <div className='p-3'>
+                        <p className='sm:text-2xl text-xl font-semibold'>{collection?.positionName}</p>
+                    </div>
             )
         }
 
@@ -53,7 +55,14 @@ export default function Card({collection,identity}) {
             role==="ROLE_ADMIN" && 
             (
                 <div className='flex gap-y-7 py-1.5 mt-2  bg-slate-600 rounded-md px-1 mr-0.5'>
-                <button className='h-full w-full flex-1'>
+                <button className='h-full w-full flex-1' onClick={()=>setConfirmationModal({
+                            text1:"Are You Sure?",
+                            text2:`${identity.slice(0,-1)} will be deleted`,
+                            btn1name:'Delete',
+                            btn2name:"Cancel",
+                            btn1Handler:identity==="Candidates" ? (()=>deleteFunc(collection?.registerNumber,setConfirmationModal)):()=>deleteFunc(collection?.id,setConfirmationModal),
+                            btn2Handler:()=>setConfirmationModal(null)
+                        })}>
                     <MdDeleteForever className='text-3xl text-red-600 w-full '/>
                 </button>
                 <button className='h-full w-full flex-1'>

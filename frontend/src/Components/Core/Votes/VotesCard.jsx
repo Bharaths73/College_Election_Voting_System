@@ -8,9 +8,9 @@ export default function VotesCard({collection,identity}) {
         <div className='flex flex-col gap-y-2 items-center border border-slate-400 p-3 rounded-xl bg-orange-100'>
             <img src={Profile} className=' w-16 h-16 rounded-full'/>
             <div className='flex flex-col items-start gap-1 text-xs font-semibold'>
-                <p className='break-all'>{collection.voter.name}</p>
-                <p className='break-all'>{collection.voter.regNo}</p>
-                <p className='break-all'>{collection.voter.department}</p>
+                <p className='break-all'>{collection?.voter?.firstName+" "+collection?.voter?.lastName}</p>
+                <p className='break-all'>{collection.voter.profile.registerNumber}</p>
+                <p className='break-all'>{collection.voter.profile.department}</p>
             </div>
         </div>
 
@@ -19,10 +19,10 @@ export default function VotesCard({collection,identity}) {
         <div className='flex flex-col gap-y-2 items-center border border-slate-400 p-3 rounded-xl bg-blue-300'>
             <img src={Profile} className='w-16 h-16 rounded-full'/>
             <div className='flex flex-col items-start gap-1 text-xs font-semibold'>
-                <p className='break-all'>{collection.candidate.name}</p>
-                <p className='break-all'>{collection.candidate.regNo}</p>
+                <p className='break-all'>{collection.candidate.firstname+" "+collection.candidate.lastName}</p>
+                <p className='break-all'>{collection.candidate.registerNumber}</p>
                 <p className='break-all'>{collection.candidate.department}</p>
-                <p className='break-all'>{collection.candidate.position}</p>
+                <p className='break-all'>{collection.candidate.position.positionName}</p>
             </div>
         </div>
     </div>

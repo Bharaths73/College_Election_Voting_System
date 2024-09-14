@@ -75,12 +75,12 @@ public class AdminController {
 
     @DeleteMapping("/position/{id}")
     public ResponseEntity<?> deletePosition(@PathVariable Integer id) throws Exception{
-        adminService.deletePosition(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<PositionsDto> positions=adminService.deletePosition(id);
+        return new ResponseEntity<>(positions,HttpStatus.OK);
     }
 
     @DeleteMapping("/candidate/{id}")
-    public ResponseEntity<?> deleteCandidate(@PathVariable Integer id) throws Exception{
+    public ResponseEntity<?> deleteCandidate(@PathVariable String id) throws Exception{
         adminService.deleteCandidate(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

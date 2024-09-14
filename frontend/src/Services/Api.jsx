@@ -12,13 +12,20 @@ export const candidateApi={
     CANDIDATES_API:BASE_URL+"/voter/candidates",
     IS_CANDIDATE_API:BASE_URL+"/voter/iscandidate",
     CANDIDATE_API:BASE_URL+"/voter/candidate",
+    DELETE_CANDIDATE_API:BASE_URL+"/admin/candidate"
 }
 
 export const votersApi={
     VOTERS_API:BASE_URL+"/admin/voters",
 }
 
+export const votesApi={
+    VOTES_API:BASE_URL+"/admin/votes",
+}
+
 
 export const positionApi={
-    POSITIONS_API:BASE_URL+"/voter/positions"
+    POSITIONS_API:BASE_URL+"/voter/positions",
+    POSITION_API:BASE_URL+"/admin/position",
+    DELETE_POSITION_API:BASE_URL+"/admin/position"
 }
