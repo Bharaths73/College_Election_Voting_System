@@ -11,7 +11,7 @@ export default function Card({collection,identity,edit,deleteFunc,setConfirmatio
             identity!=="Positions" ? 
             (
                 <div className='flex flex-row items-center'>
-            <img src={collection.profilePic} className='w-22 h-28 border-slate-400 rounded-lg object-cover'/>
+            <img src={collection.profilePic} className='w-22 h-28 border-slate-400 rounded-lg object-cover' loading='lazy'/>
             <div className='flex flex-col gap-1 ml-5 w-full'>
                 <div className='flex gap-2 text-sm font-semibold'>
                     <p className='text-wrap break-all'>{collection.firstName}</p>
@@ -20,20 +20,33 @@ export default function Card({collection,identity,edit,deleteFunc,setConfirmatio
                 {
                     identity==='Voters' && 
                     (
-                        <div>
+                        <div className='flex flex-col'>
                             <p className='text-xs break-all'>{collection.mobileNumber}</p>
                             <p className='text-xs break-all'>{collection.email}</p>
+                            
                         </div>
                     )
                 }
                 <p className='text-xs break-all'>{collection.department}</p>
                 <p className='text-xs break-all'>{collection.registerNumber}</p>
                 {
+                    identity==='Voters' &&
+                    (
+                        <div className='flex text-lg break-all font-extrabold gap-x-2'>
+                            <p>Voted:</p>
+                            <p className={`text-lg break-all font-extrabold ${collection?.voted ? 'text-green-600':'text-red-600'}`}>{collection?.voted ? "Yes" : "No"}</p>
+                        </div>
+                    )
+                    
+                }
+                {
                     identity==='Candidates' &&
                     (
-                        <div>
-                            <p className='text-xs break-all'>{collection?.position?.positionName}</p>
-                            <p className='text-xs break-all'>{collection?.votes}</p>
+                        <div className='mt-0.5 gap-y-1'>
+                            <p className='text-sm break-all font-semibold'>{collection?.position?.positionName}</p>
+                            <div>
+                               <p className='text-lg break-all font-extrabold text-blue-700'>Votes: {collection?.votes}</p>
+                            </div>
                         </div>
                     )
                 }
@@ -60,7 +73,7 @@ export default function Card({collection,identity,edit,deleteFunc,setConfirmatio
                             text2:`${identity.slice(0,-1)} will be deleted`,
                             btn1name:'Delete',
                             btn2name:"Cancel",
-                            btn1Handler:identity==="Candidates" ? (()=>deleteFunc(collection?.registerNumber,setConfirmationModal)):()=>deleteFunc(collection?.id,setConfirmationModal),
+                            btn1Handler:identity==="Candidates" || identity==="Voters" ? (()=>deleteFunc(collection?.registerNumber,setConfirmationModal)):()=>deleteFunc(collection?.id,setConfirmationModal),
                             btn2Handler:()=>setConfirmationModal(null)
                         })}>
                     <MdDeleteForever className='text-3xl text-red-600 w-full '/>

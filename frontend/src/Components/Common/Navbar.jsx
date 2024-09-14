@@ -54,7 +54,7 @@ export default function Navbar() {
         {
            token && (
             <div className='flex sm:px-16 px-10 items-center gap-2 relative group-last:'>
-            <img src={user.profilePicUrl} className='sm:w-[2.7em] sm:h-[2.8em] w-[2.5em] h-[2.5em] border-blue-500 rounded-full'/>
+            <img src={user.profilePicUrl} className='sm:w-[2.7em] sm:h-[2.8em] w-[2.5em] h-[2.5em] border-blue-500 rounded-full' loading='lazy'/>
             <div className='flex items-center gap-1'>
               {
                 windowWidth > 850 && (<p className='sm:text-lg text-base'>{user.firstName}</p>)

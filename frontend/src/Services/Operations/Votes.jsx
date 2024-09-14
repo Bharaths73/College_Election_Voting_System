@@ -2,11 +2,11 @@ import toast from "react-hot-toast";
 import { votesApi } from "../Api";
 import { ApiConnector } from "../ApiConnector";
 
-export const getAllVotes=async(token)=>{
+export const getAllVotes=async(token,num,limit="5")=>{
     let result=[];
     const toastId=toast.loading("Getting All Votes...")
     try {
-        const response=await ApiConnector("GET",votesApi.VOTES_API,null,{Authorization:`Bearer ${token}`})
+        const response=await ApiConnector("GET",votesApi.VOTES_API+`?pageNo=${String(num)??"0"}&pageSize=${limit??"5"}`,null,{Authorization:`Bearer ${token}`})
         console.log("votes response is ",response);
         
         if(response){

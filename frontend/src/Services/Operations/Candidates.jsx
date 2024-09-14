@@ -2,11 +2,11 @@ import toast from "react-hot-toast";
 import { AuthApi, candidateApi } from "../Api";
 import { ApiConnector } from "../ApiConnector";
 
-export const getAllCandidates=async(token)=>{
+export const getAllCandidates=async(token,num,limit="5")=>{
     let result=[];
     const toastId=toast.loading("Getting All Candidates...")
     try {
-        const response=await ApiConnector("GET",candidateApi.CANDIDATES_API,null,{Authorization:`Bearer ${token}`})
+        const response=await ApiConnector("GET",candidateApi.CANDIDATES_API+`?pageNo=${String(num)??"0"}&pageSize=${limit??"5"}`,null,{Authorization:`Bearer ${token}`})
         console.log("candidates are ",response.data.data);
         if(response){
             result=response.data.data

@@ -17,6 +17,7 @@ export const candidateApi={
 
 export const votersApi={
     VOTERS_API:BASE_URL+"/admin/voters",
+    DELETE_VOTERS_API:BASE_URL+"/admin/voters",
 }
 
 export const votesApi={

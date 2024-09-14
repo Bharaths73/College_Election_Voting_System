@@ -97,4 +97,9 @@ public class AdminController {
         return new ResponseEntity<>(votes,HttpStatus.OK);
     }
 
+    @DeleteMapping("/voters/{regNo}")
+    public ResponseEntity<?> deleteVoter(@PathVariable String regNo) throws Exception{
+        adminService.deleteVoter(regNo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

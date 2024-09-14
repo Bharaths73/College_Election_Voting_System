@@ -6,7 +6,7 @@ export default function VotesCard({collection,identity}) {
   return (
     <div className='flex flex-row items-center border border-slate-400 p-3 rounded-lg bg-slate-300 justify-between gap-x-2'>
         <div className='flex flex-col gap-y-2 items-center border border-slate-400 p-3 rounded-xl bg-orange-100'>
-            <img src={Profile} className=' w-16 h-16 rounded-full'/>
+            <img src={Profile} className=' w-16 h-16 rounded-full' loading='lazy'/>
             <div className='flex flex-col items-start gap-1 text-xs font-semibold'>
                 <p className='break-all'>{collection?.voter?.firstName+" "+collection?.voter?.lastName}</p>
                 <p className='break-all'>{collection.voter.profile.registerNumber}</p>
@@ -17,7 +17,7 @@ export default function VotesCard({collection,identity}) {
         <img src={arrow} className='w-6 h-6'/>
 
         <div className='flex flex-col gap-y-2 items-center border border-slate-400 p-3 rounded-xl bg-blue-300'>
-            <img src={Profile} className='w-16 h-16 rounded-full'/>
+            <img src={Profile} className='w-16 h-16 rounded-full' loading='lazy'/>
             <div className='flex flex-col items-start gap-1 text-xs font-semibold'>
                 <p className='break-all'>{collection.candidate.firstname+" "+collection.candidate.lastName}</p>
                 <p className='break-all'>{collection.candidate.registerNumber}</p>

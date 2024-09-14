@@ -111,7 +111,7 @@ public class AdminService {
             pageSize(voters.getSize()).
            isFirstPage(voters.isFirst()).
             hasNextPage(voters.hasNext()).
-            isLastPage(voters.isLast()).
+            isLastPage(voters.isLast()).isVoted(voter.getProfile().isVoted()).
             totalNoOfVoters(voters.getTotalElements()).
             hasPreviousPage(voters.hasPrevious()).build()
         ).collect(Collectors.toList());
@@ -181,6 +181,21 @@ public class AdminService {
         List<VotesDto> votesDtos=votes.getContent().stream().map(vote->VotesDto.builder().candidate(vote.getCandidate()).position(vote.getPosition()).voter(vote.getVoter()).isFirstPage(votes.isFirst()).isLastPage(votes.isLast()).hasNextPage(votes.hasNext()).hasPreviousPage(votes.hasPrevious()).pageNo(votes.getNumber()).pageSize(votes.getSize()).totalNoOfVotes(votes.getTotalElements()).totalPages(votes.getTotalPages()).build()).collect(Collectors.toList());
 
         return votesDtos;
+    }
+
+
+
+    @Transactional
+    public void deleteVoter(String regNo) throws Exception {
+        if(regNo.isBlank()){
+            throw new Exception("Register number is empty");
+        }
+        Optional<Voters> voter=votersRepo.findByRegisterNumber(regNo);
+        if(!voter.isPresent()){
+            throw new Exception("Voter is not present in database");
+        }
+        votersRepo.deleteVoterByRegisterNumber(regNo);
+        votersRepo.deleteProfileByRegisterNumber(regNo);
     }
     
     

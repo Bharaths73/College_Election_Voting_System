@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, lazy } from 'react'
 import profile from '../assets/profile.jpg'
 import { useSelector } from 'react-redux'
 
@@ -10,7 +10,7 @@ export default function Profile() {
         <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Profile</h1>
         <div className='mt-10 bg-blue-200 py-7 px-7 rounded-lg shadow-lg'>
            <div className='flex flex-row gap-8 items-center'>
-              <img src={user.profilePicUrl} width={100} height={100} className='rounded-lg'/>
+              <img src={user.profilePicUrl} width={100} height={100} className='rounded-lg' loading="lazy"/>
               <div className='flex flex-col gap-1'>
                 <div className='flex flex-row gap-3 text-black font-semibold text-xl'>
                   <p className='break-all'>{user.firstName}</p>

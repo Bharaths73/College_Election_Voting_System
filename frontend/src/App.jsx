@@ -1,21 +1,22 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import {Routes,Route} from 'react-router-dom';
 import Navbar from './Components/Common/Navbar';
-import Login from './Pages/Login';
-import Dashboard from './Pages/Dashboard';
-import Analytics from './Pages/Analytics';
-import Profile from './Pages/Profile';
-import Candidates from './Pages/Candidates';
-import Positions from './Pages/Positions';
-import Votes from './Pages/Votes';
-import Voters from './Pages/Voters';
-import Vote from './Pages/Vote';
-import Candidate from './Pages/Candidate';
-import Settings from './Pages/Settings';
-import Error from './Pages/Error';
-import Register from './Pages/Register';
+const Login=lazy(()=>import('./Pages/Login'));
+const Dashboard=lazy(()=>import('./Pages/Dashboard'));
+const Analytics=lazy(()=>import('./Pages/Analytics'));
+const Candidates=lazy(()=>import('./Pages/Candidates'));
+const Positions=lazy(()=>import('./Pages/Positions'));
+const Votes=lazy(()=>import('./Pages/Votes'));
+const Vote=lazy(()=>import('./Pages/Vote'));
+const Candidate=lazy(()=>import('./Pages/Candidate'));
+const Settings=lazy(()=>import('./Pages/Settings'));
+const Error=lazy(()=>import('./Pages/Error'));
+const Register=lazy(()=>import('./Pages/Register'));
+const Voters=lazy(()=>import('./Pages/Voters'));
+const Profile=lazy(()=>import('./Pages/Profile'));
+
 import Public from './Components/Auth/Public';
 import Private from './Components/Auth/Private';
 
@@ -24,6 +25,7 @@ function App() {
   return (
     <div className=''>
       <Navbar/>
+      <Suspense fallback={<div>Loading...</div>}>
       <Routes>
       <Route path='/' element={<Public><Login/></Public>}/>
       <Route path='/admin/login' element={<Public><Login/></Public>}/>
@@ -45,6 +47,7 @@ function App() {
           <Route path='dashboard/settings' element={<Private><Settings/></Private>}/>
       </Route> 
       </Routes>
+      </Suspense>
     </div>
   )
 }
