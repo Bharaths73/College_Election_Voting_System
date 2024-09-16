@@ -100,7 +100,7 @@ export default function Candidate() {
       {
          isCandidate ? (
            <div className=' flex flex-col gap-5 justify-center'>
-              <p className='sm:text-4xl text-2xl text-slate-600'>Already Registered as Candidate</p>
+              <p className='sm:text-4xl text-2xl text-slate-600'>Thank you for registering as candidate</p>
               <div className='flex justify-center mt-5'>
                  <CandidateCard candidate={candidateDetails}/>
               </div>

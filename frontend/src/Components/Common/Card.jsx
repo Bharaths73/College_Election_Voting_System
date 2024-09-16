@@ -44,9 +44,14 @@ export default function Card({collection,identity,edit,deleteFunc,setConfirmatio
                     (
                         <div className='mt-0.5 gap-y-1'>
                             <p className='text-sm break-all font-semibold'>{collection?.position?.positionName}</p>
-                            <div>
-                               <p className='text-lg break-all font-extrabold text-blue-700'>Votes: {collection?.votes}</p>
-                            </div>
+                            {
+                                role==="ROLE_ADMIN" &&
+                                (
+                                <div>
+                                   <p className='text-lg break-all font-extrabold text-blue-700'>Votes: {collection?.votes}</p>
+                                </div>
+                                )
+                            }
                         </div>
                     )
                 }

@@ -21,6 +21,7 @@ import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
+import com.voting.college_election_voting.DTO.VotingDto;
 import com.voting.college_election_voting.Service.VotersService;
 import jakarta.validation.Valid;
 
@@ -66,6 +67,12 @@ public class VotersController {
         return new ResponseEntity<>(candidates,HttpStatus.OK);
     }
 
+    @GetMapping("/candid")
+    public ResponseEntity<?> getAllCandidates(){
+        List<CandidateDto> candidates=votersService.getAllCandidates();
+        return new ResponseEntity<>(candidates,HttpStatus.OK);
+    }
+
     @GetMapping("/positions")
     public ResponseEntity<?> getPositions(){
        List<PositionsDto> positions=votersService.getAllPositions();
@@ -84,10 +91,16 @@ public class VotersController {
         return new ResponseEntity<>(candidateDto,HttpStatus.OK);
     }
 
-    // @PostMapping("/vote")
-    // public ResponseEntity<?> voteToCandidate(@RequestBody CandidateRegisterDto candidate) throws Exception{
-    //     votersService.voteToCandidate(candidate);
-    //     return new ResponseEntity<>(HttpStatus.OK);
-    // }
+    @PostMapping("/vote")
+    public ResponseEntity<?> voteToCandidate(@RequestBody List<VotingDto> votes) throws Exception{
+        List<VotingDto> resultVotes=votersService.voteToCandidate(votes);
+        return new ResponseEntity<>(resultVotes,HttpStatus.OK);
+    }
+
+    @PostMapping("/isvoted")
+    public ResponseEntity<?> isVoted(@RequestBody RegisteredVoterResponse voter) throws Exception{
+        List<VotingDto> resultVotes=votersService.isVoted(voter);
+        return new ResponseEntity<>(resultVotes,HttpStatus.OK);
+    }
     
 }

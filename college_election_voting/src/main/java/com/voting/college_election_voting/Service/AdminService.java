@@ -100,9 +100,9 @@ public class AdminService {
 
 
 
-    public List<GetVotersDto> getAllVoters(Integer pageNo,Integer pageSize) {
+    public List<GetVotersDto> getAllVoters(Integer pageNo,Integer pageSize,String sortBy) {
 
-        Pageable page=PageRequest.of(pageNo, pageSize);
+        Pageable page=PageRequest.of(pageNo, pageSize,Sort.by(sortBy));
 
         Page<Voters> voters=votersRepo.findAll(page);
         List<GetVotersDto> voterRegisterDtos=voters.getContent().stream().filter(voter->"VOTER".equals(voter.getRole().name())).map(voter->

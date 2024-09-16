@@ -62,8 +62,8 @@ public class AdminController {
     }
 
     @GetMapping("/voters")
-    public ResponseEntity<?> getVoters(@RequestParam(required = false,defaultValue = "0") Integer pageNo,@RequestParam(required = false,defaultValue = "10") Integer pageSize){
-       List<GetVotersDto> voters=adminService.getAllVoters(pageNo,pageSize);
+    public ResponseEntity<?> getVoters(@RequestParam(required = false,defaultValue = "0") Integer pageNo,@RequestParam(required = false,defaultValue = "10") Integer pageSize,@RequestParam(required = false,defaultValue = "profile.registerNumber") String sortBy){
+       List<GetVotersDto> voters=adminService.getAllVoters(pageNo,pageSize,sortBy);
        return new ResponseEntity<>(voters,HttpStatus.OK);
     }
 

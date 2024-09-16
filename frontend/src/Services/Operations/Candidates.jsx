@@ -20,6 +20,24 @@ export const getAllCandidates=async(token,num,limit="5")=>{
     return result;
 }
 
+export const getAllCandid=async(token)=>{
+    let result=[];
+    const toastId=toast.loading("Getting All Candidates...")
+    try {
+        const response=await ApiConnector("GET",candidateApi.CANDID_API,null,{Authorization:`Bearer ${token}`})
+        console.log("candidates are ",response.data.data);
+        if(response){
+            result=response.data.data
+        }
+        toast.success("Fetched All Candidates")
+    } catch (error) {
+        console.log("Failed to fetch candidates ",error);
+        toast.error("Failed to fetch candidates")
+    }
+    toast.dismiss(toastId)
+    return result;
+}
+
 
 
 export const confirmCandidate=async(token,data)=>{

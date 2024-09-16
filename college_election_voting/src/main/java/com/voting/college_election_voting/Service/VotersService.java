@@ -15,6 +15,7 @@ import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
+import com.voting.college_election_voting.DTO.VotingDto;
 import com.voting.college_election_voting.Model.Candidates;
 import com.voting.college_election_voting.Model.OTP;
 import com.voting.college_election_voting.Model.Positions;
@@ -22,12 +23,14 @@ import com.voting.college_election_voting.Model.Profile;
 import com.voting.college_election_voting.Model.Role;
 import com.voting.college_election_voting.Model.Students;
 import com.voting.college_election_voting.Model.Voters;
+import com.voting.college_election_voting.Model.Votes;
 import com.voting.college_election_voting.Repository.CandidatesRepo;
 import com.voting.college_election_voting.Repository.OTPRepo;
 import com.voting.college_election_voting.Repository.PositionsRepo;
 import com.voting.college_election_voting.Repository.ProfileRepo;
 import com.voting.college_election_voting.Repository.StudentRepo;
 import com.voting.college_election_voting.Repository.VotersRepo;
+import com.voting.college_election_voting.Repository.VotesRepo;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +38,7 @@ import java.util.Map;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -62,11 +65,12 @@ public class VotersService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private CandidatesRepo candidatesRepo;
     private PositionsRepo positionsRepo;
+    private VotesRepo votesRepo;
 
     @Autowired
     private ProfileRepo profileRepo;
 
-    public VotersService(VotersRepo votersRepo,StudentRepo studentRepo,EmailService emailService,OTPRepo otpRepo,ModelMapper modelMapper,CloudinaryImageService cloudinaryImageService, AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo) {
+    public VotersService(VotersRepo votersRepo,StudentRepo studentRepo,EmailService emailService,OTPRepo otpRepo,ModelMapper modelMapper,CloudinaryImageService cloudinaryImageService, AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo,VotesRepo votesRepo) {
         this.votersRepo = votersRepo;
         this.studentRepo=studentRepo;
         this.emailService=emailService;
@@ -78,6 +82,7 @@ public class VotersService {
         this.candidatesRepo=candidatesRepo;
         this.positionsRepo=positionsRepo;
         this.bCryptPasswordEncoder=new BCryptPasswordEncoder(12);
+        this.votesRepo=votesRepo;
     }
 
 
@@ -228,8 +233,8 @@ public class VotersService {
     }
 
 
-     public List<CandidateDto> getAllCandidates(Integer pageNo,Integer pageSize,String sortBy) {
-
+     public List<CandidateDto> getAllCandidates(Integer pageNo,Integer pageSize,String sortBy) 
+     {
         Pageable pages=PageRequest.of(pageNo, pageSize,Sort.by(sortBy));
         Page<Candidates> candidates=candidatesRepo.findAll(pages);
         
@@ -253,6 +258,25 @@ public class VotersService {
                                             .totalNoOfCandidates(candidates.getTotalElements())
                                             .totalPages(candidates.getTotalPages()).build())
                                             .collect(Collectors.toList());
+
+        return candidateDtos;
+    }
+
+    public List<CandidateDto> getAllCandidates() 
+     {
+        List<Candidates> candidates=candidatesRepo.findAll();
+        
+        List<CandidateDto> candidateDtos=candidates.stream()
+                                        .map(candidate->
+                                            CandidateDto.builder()
+                                            .firstName(candidate.getFirstname())
+                                            .lastName(candidate.getLastName())
+                                            .department(candidate.getDepartment())
+                                            .position(candidate.getPosition())
+                                            .profilePic(candidate.getProfilePicUrl())
+                                            .registerNumber(candidate.getRegisterNumber())
+                                            .votes(candidate.getVotes().size())
+                                            .build()).collect(Collectors.toList());
 
         return candidateDtos;
     }
@@ -329,6 +353,58 @@ public class VotersService {
         }
         return CandidateDto.builder().isCandidate(false).build();
     }
-    
-    
+
+
+
+    public List<VotingDto> voteToCandidate(List<VotingDto> votes) throws Exception{
+        if(votes.isEmpty()){
+            throw new Exception("You should vote all positions");
+        }
+        List<Votes> savedVotes=new ArrayList<>();
+
+        for(VotingDto vote:votes){
+            if(vote.getCandidate().isBlank() || vote.getPosition().getPositionName().isBlank() || vote.getVoter().isBlank()){
+                throw new Exception("All fields (candidate, position, voter) must be filled.");
+            }
+            Optional<Voters> voter=votersRepo.findByRegisterNumber(vote.getVoter());
+            if(!voter.isPresent()){
+                throw new Exception("Voter with register number " + vote.getVoter() + " not found.");
+            }
+            Optional<Candidates> candidate=candidatesRepo.findByRegisterNumber(vote.getCandidate());
+            if(!candidate.isPresent()){
+                throw new Exception("Candidate with register number " + vote.getCandidate() + " not found.");
+            }
+            Optional<Positions> position=positionsRepo.findById(vote.getPosition().getId());
+            if(!candidate.isPresent()){
+                throw new Exception("Position " + vote.getPosition().getPositionName() + " not found.");
+            }
+            Votes dbVotes=new Votes();
+            dbVotes.setCandidate(candidate.get());
+            dbVotes.setPosition(position.get());
+            dbVotes.setVoter(voter.get());
+            savedVotes.add(dbVotes);
+        };
+        List<Votes> persistentVotes=votesRepo.saveAll(savedVotes);
+        
+        Optional<Voters> voter=votersRepo.findByRegisterNumber(votes.get(0).getVoter());
+
+        if(voter.isPresent()){
+            voter.get().getProfile().setVoted(true);
+            votersRepo.save(voter.get());
+        }
+        List<VotingDto> votingDtos=persistentVotes.stream().map(vote->
+            VotingDto.builder().candidate(vote.getCandidate().getFirstname()+" "+vote.getCandidate().getLastName()).position(modelMapper.map(vote.getPosition(), PositionsDto.class)).build()).collect(Collectors.toList());
+
+     return votingDtos;
+    }   
+
+    public List<VotingDto> isVoted(RegisteredVoterResponse voter) throws Exception{
+        Optional<Voters> dbVoter=votersRepo.findByRegisterNumber(voter.getRegisterNumber());
+        if(!dbVoter.isPresent()){
+            throw new Exception("Voter not found");
+        }
+        List<Votes> votes=votesRepo.findByVoterId(dbVoter.get().getId());
+
+        return votes.stream().map(vote->VotingDto.builder().candidate(vote.getCandidate().getFirstname()+" "+vote.getCandidate().getLastName()).position(modelMapper.map(vote.getPosition(), PositionsDto.class)).build()).collect(Collectors.toList());
+    }
 }
