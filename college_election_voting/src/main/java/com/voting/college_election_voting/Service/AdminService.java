@@ -152,11 +152,6 @@ public class AdminService {
         return positionsDtos;
     }
 
-    public void deleteCandidate(String id) throws Exception{
-        Candidates candidate=candidatesRepo.findByRegisterNumber(id).orElseThrow(()->new Exception("Candidate not found to delete"));
-        candidatesRepo.deleteByRegisterNumber(id);
-    }
-
 
 
     public AdminDashBoardDto getDashboardDetails() {
@@ -197,6 +192,46 @@ public class AdminService {
         votersRepo.deleteVoterByRegisterNumber(regNo);
         votersRepo.deleteProfileByRegisterNumber(regNo);
     }
+
+
+
+    public void resetVotes() {
+        votesRepo.deleteAll();
+    }
+
+    public void resetVoters() {
+        // votersRepo.deleteAll();
+        List<Voters> voters=votersRepo.findAll();
+        List<Voters> filteredVoter=voters.stream().filter((voter)->"VOTER".equals(voter.getRole().name())).collect(Collectors.toList());
+        votersRepo.deleteAll(filteredVoter);
+    }
     
+    public void resetCandidates() {
+        candidatesRepo.deleteAll();
+    }
     
+    public void resetPositions() {
+        positionsRepo.deleteAll();
+    }
+
+
+
+    public PositionsDto editPosition(PositionsDto positionsDto) throws Exception {
+        Optional<Positions> position=positionsRepo.findById(positionsDto.getId());
+
+        if(!position.isPresent()){
+            throw new Exception("Position Id is not present");
+        }
+        if(positionsDto.getPositionName().isBlank()){
+            throw new Exception("Position name cannot be blank");
+        }
+        List<Positions> isPosAvailabe=positionsRepo.findAll().stream().filter(pos->pos.getPositionName().equalsIgnoreCase(positionsDto.getPositionName().trim())).collect(Collectors.toList());
+
+        if(!isPosAvailabe.isEmpty()){
+            throw new Exception("Position already exists");
+        }
+        Positions positions=modelMapper.map(positionsDto, Positions.class);
+        Positions updatedPosition=positionsRepo.save(positions);
+        return modelMapper.map(updatedPosition, PositionsDto.class);
+    }
 }

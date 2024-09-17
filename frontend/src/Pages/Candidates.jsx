@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Body from '../Components/Common/Body'
 import { useSelector } from 'react-redux';
-import { deleteCand, getAllCandidates } from '../Services/Operations/Candidates';
+import { deleteCand, getAllCandidates, resetCandidates } from '../Services/Operations/Candidates';
 
 
 export default function Candidates() {
@@ -36,6 +36,13 @@ export default function Candidates() {
       console.log("scrolling error ",error);
     }
  }
+
+ async function candidatesReset(setConfirmationModal){
+  setConfirmationModal(null)
+  await resetCandidates(token)
+  setCandidates([])
+}
+
  useEffect(()=>{
   window.addEventListener("scroll",handleInfiniteScroll)
   return ()=>window.removeEventListener("scroll",handleInfiniteScroll)
@@ -46,6 +53,6 @@ export default function Candidates() {
 },[page])
 
   return (
-    <Body collections={candidates} name="Candidates" edit={null} deleteFunc={deleteCandidate}/>
+    <Body collections={candidates} name="Candidates" edit={null} deleteFunc={deleteCandidate} reset={candidatesReset}/>
   )
 }

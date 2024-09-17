@@ -2,11 +2,11 @@ import toast from "react-hot-toast";
 import { votesApi } from "../Api";
 import { ApiConnector } from "../ApiConnector";
 
-export const getAllVotes=async(token,num,limit="5")=>{
+export const getAllVotes=async(token,num,limit="15")=>{
     let result=[];
     const toastId=toast.loading("Getting All Votes...")
     try {
-        const response=await ApiConnector("GET",votesApi.VOTES_API+`?pageNo=${String(num)??"0"}&pageSize=${limit??"5"}`,null,{Authorization:`Bearer ${token}`})
+        const response=await ApiConnector("GET",votesApi.VOTES_API+`?pageNo=${String(num)??"0"}&pageSize=${limit??"15"}`,null,{Authorization:`Bearer ${token}`})
         console.log("votes response is ",response);
         
         if(response){
@@ -34,7 +34,7 @@ export const vote=async(token,votes)=>{
         if(response){
             result=response.data.data
         }
-        toast.success("You have successfully voted")
+        
     } catch (error) {
         console.log("Failed to vote ",error);
         toast.error("Failed to vote ",error.response.data.error)
@@ -55,7 +55,9 @@ export const isVoted=async(token,user)=>{
         if(response){
             result=response.data.data
         }
-        toast.success("You have already voted")
+        if(result.length>0){
+            toast.success("You have successfully voted")
+        }
     } catch (error) {
         console.log("Failed to check ",error);
         toast.error("Failed to check ",error.response.data.error)
@@ -64,5 +66,23 @@ export const isVoted=async(token,user)=>{
         toast.dismiss(toastId)
     }
     return result
+}
+
+export const resetVotes=async(token)=>{
+    const toastId=toast.loading("RESETING......")
+    try {
+        const response=await ApiConnector("DELETE",votesApi.IS_VOTED_API,null,{Authorization:`Bearer ${token}`})
+        console.log("Reset votes response ",response);
+        
+        if(response.status===200){
+            toast.success("Votes successfully deleted")
+        }
+    } catch (error) {
+        console.log("Failed to reset votes ",error);
+        toast.error("Failed to reset votes ",error.response.data.error)
+    }
+    finally{
+        toast.dismiss(toastId)
+    }
 }
 

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import Modal from '../Core/Position/Modal';
 import ConfirmationModal from './ConfirmationModal';
 
-export default function Body({collections,name,edit,deleteFunc,addFunc}) {
+export default function Body({collections,name,edit,deleteFunc,addFunc,reset}) {
   const displaySidebar=useSelector(state=>state.sidebar.display);
   const {role}=useSelector(state=>state.authentication)
   const [modal,setModal]=useState(null)
@@ -18,7 +18,7 @@ export default function Body({collections,name,edit,deleteFunc,addFunc}) {
         <div className='ml-5 mr-5 pb-10'>
         <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>{name}</h1>
         {
-                  name==='Positions' && role==="ROLE_ADMIN" &&(
+              name==='Positions' && role==="ROLE_ADMIN" &&(
                     <Link className='mt-10'><button className='px-4 py-2 bg-green-400 text-white rounded-md text-base font-semibold' onClick={
                       ()=>setModal({
                       text:"Add Position",
@@ -31,12 +31,18 @@ export default function Body({collections,name,edit,deleteFunc,addFunc}) {
         {
            collections?.length > 0  ? (
              <div className=''>
-
-              {
-                  name==='Votes' && (
-                    <Link><button className='px-4 py-2 bg-red-500 text-white rounded-md text-base font-semibold'>Reset Votes</button></Link>
-                  )
-                }
+                   {
+                      role==="ROLE_ADMIN" && (
+                        <button className='px-4 py-2 bg-red-500 text-white rounded-md text-base font-semibold mt-5' onClick={()=>setConfirmationModal({
+                          text1:"Are You Sure?",
+                          text2:`${name} will be deleted`,
+                          btn1name:'Delete',
+                          btn2name:"Cancel",
+                          btn1Handler:()=>reset(setConfirmationModal),
+                          btn2Handler:()=>setConfirmationModal(null)
+                      })}>Reset {name}</button>
+                      )
+                   }
 
               <div className='flex sm:justify-end justify-center gap-2 items-center mt-5'>
                   <input type='search' className='sm:w-96 w-72 py-1 px-3 border-2 border-gray-400 rounded-md' placeholder='Search'/>
@@ -47,7 +53,7 @@ export default function Body({collections,name,edit,deleteFunc,addFunc}) {
                 {
                    name!=='Votes' ? (
                     collections.map((collection,index)=>(
-                      <Card collection={collection} key={index} identity={name} edit={null} deleteFunc={deleteFunc} setConfirmationModal={setConfirmationModal}/>
+                      <Card collection={collection} key={index} identity={name} edit={edit} deleteFunc={deleteFunc} setConfirmationModal={setConfirmationModal} setModal={setModal}/>
                   ))
                    ) : (
                     collections.map((collection,index)=>(
@@ -64,7 +70,7 @@ export default function Body({collections,name,edit,deleteFunc,addFunc}) {
 
 
         </div>
-        {modal && <Modal modalData={modal} addFunc={addFunc} setModal={setModal}/>}
+        {modal && <Modal modalData={modal} addFunc={addFunc} setModal={setModal} editFunc={edit}/>}
         { 
         confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}
     </div>

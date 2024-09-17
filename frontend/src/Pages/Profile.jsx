@@ -1,5 +1,4 @@
 import React, { Fragment, lazy } from 'react'
-import profile from '../assets/profile.jpg'
 import { useSelector } from 'react-redux'
 
 export default function Profile() {

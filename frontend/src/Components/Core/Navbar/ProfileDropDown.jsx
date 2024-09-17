@@ -42,11 +42,11 @@ export default function ProfileDropDown({profileDisplay}) {
             </div>
             </div>
 
-            <hr className='mt-5 mb-2'/>
-            <div className='flex gap-2 items-center'>
-              <GrLogout className='text-xl'/>
-              <button onClick={logoutHandler}>Logout</button>
-            </div>
+            <hr className='mt-5 mb-2'/>         
+              <button onClick={logoutHandler} className='flex gap-2 items-center cursor-pointer'>
+                <GrLogout className='text-xl'/>
+                Logout
+              </button>
             </div>
             )
           }

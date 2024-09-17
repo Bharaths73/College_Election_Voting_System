@@ -7,6 +7,8 @@ import ProfileDropDown from '../Core/Navbar/ProfileDropDown';
 import { Sidebar } from '../Dashboard/Sidebar';
 import {useSelector,useDispatch} from 'react-redux';
 import { setDisplaySidebar } from '../../Redux/Slices/SidebarSlice';
+const COLLEGE_NAME=import.meta.env.VITE_COLLEGE_NAME;
+const COLLEGE_LOGO=import.meta.env.VITE_COLLEGE_LOGO;
 
 export default function Navbar() {
 
@@ -40,10 +42,10 @@ export default function Navbar() {
              )
           }
           <div className='flex gap-2 items-center' >
-            <img src={bmsccm_logo} className='sm:w-14 sm:h-14 w-12 h-12'/>
+            <img src={COLLEGE_LOGO} className='sm:w-14 sm:h-14 w-12 h-12'/>
             {
               windowWidth > 850 ? (
-                <p className='sm:text-xl font-medium text-xs text-white'>BMS College of Commerce and Management</p>
+                <p className='sm:text-xl font-medium text-xs text-white'>{COLLEGE_NAME}</p>
               ) : (
                 <p className='sm:text-xl font-medium text-lg text-white'>BMSCCM</p>
               )

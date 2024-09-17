@@ -3,7 +3,7 @@ import { MdDeleteForever,MdModeEditOutline } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 
-export default function Card({collection,identity,edit,deleteFunc,setConfirmationModal}) {
+export default function Card({collection,identity,edit,deleteFunc,setConfirmationModal,setModal}) {
     const {role}=useSelector(state=>state.authentication)
   return (
     <div className='bg-slate-300 p-3 rounded-lg shadow-lg'>
@@ -83,9 +83,19 @@ export default function Card({collection,identity,edit,deleteFunc,setConfirmatio
                         })}>
                     <MdDeleteForever className='text-3xl text-red-600 w-full '/>
                 </button>
-                <button className='h-full w-full flex-1'>
-                   <MdModeEditOutline className='text-3xl text-yellow-400 w-full'/>
-                </button>
+                {
+                    identity==="Positions" && (
+                        <button className='h-full w-full flex-1' onClick={()=>setModal({
+                            text:"Edit Position",
+                            btn1Text:'Submit',
+                            btn2Text:"Cancel",
+                            data:collection?.id,
+                            btn2Handler:()=>setModal(null)
+                        })}>
+                         <MdModeEditOutline className='text-3xl text-yellow-400 w-full'/>
+                      </button>
+                    )
+                }
            </div>
             )
         }

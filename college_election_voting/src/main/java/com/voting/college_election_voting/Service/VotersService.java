@@ -407,4 +407,9 @@ public class VotersService {
 
         return votes.stream().map(vote->VotingDto.builder().candidate(vote.getCandidate().getFirstname()+" "+vote.getCandidate().getLastName()).position(modelMapper.map(vote.getPosition(), PositionsDto.class)).build()).collect(Collectors.toList());
     }
+
+    public void deleteCandidate(String id) throws Exception{
+        Candidates candidate=candidatesRepo.findByRegisterNumber(id).orElseThrow(()->new Exception("Candidate not found to delete"));
+        candidatesRepo.deleteByRegisterNumber(id);
+    }
 }

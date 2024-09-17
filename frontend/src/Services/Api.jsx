@@ -13,23 +13,28 @@ export const candidateApi={
     CANDID_API:BASE_URL+"/voter/candid",
     IS_CANDIDATE_API:BASE_URL+"/voter/iscandidate",
     CANDIDATE_API:BASE_URL+"/voter/candidate",
-    DELETE_CANDIDATE_API:BASE_URL+"/admin/candidate"
+    DELETE_CANDIDATE_API:BASE_URL+"/admin/candidate",
+    RESET_CANDIDATE_API:BASE_URL+"/admin/resetCandidates"
 }
 
 export const votersApi={
     VOTERS_API:BASE_URL+"/admin/voters",
     DELETE_VOTERS_API:BASE_URL+"/admin/voters",
+    RESET_VOTERS_API:BASE_URL+"/admin/resetVoters",
 }
 
 export const votesApi={
     VOTES_API:BASE_URL+"/admin/votes",
     VOTE_API:BASE_URL+"/voter/vote",
     IS_VOTED_API:BASE_URL+"/voter/isvoted",
+    RESET_VOTES_API:BASE_URL+"/admin/resetVotes",
 }
 
 
 export const positionApi={
     POSITIONS_API:BASE_URL+"/voter/positions",
     POSITION_API:BASE_URL+"/admin/position",
-    DELETE_POSITION_API:BASE_URL+"/admin/position"
+    EDIT_POSITION_API:BASE_URL+"/admin/position",
+    DELETE_POSITION_API:BASE_URL+"/admin/position",
+    RESET_POSITIONS_API:BASE_URL+"/admin/resetPositions"
 }

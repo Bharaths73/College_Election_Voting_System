@@ -53,3 +53,40 @@ export const AddPos=async(token,position)=>{
     }
     toast.dismiss(toastId)
 }
+
+export const resetPositions=async(token)=>{
+    const toastId=toast.loading("RESETING......")
+    try {
+        const response=await ApiConnector("DELETE",positionApi.RESET_POSITIONS_API,null,{Authorization:`Bearer ${token}`})
+        console.log("Reset positions response is ",response);
+        
+        if(response.status===200){
+            toast.success("Positions successfully deleted")
+        }
+    } catch (error) {
+        console.log("Failed to reset positions ",error);
+        toast.error("Failed to reset positions ",error.response.data.error)
+    }
+    finally{
+        toast.dismiss(toastId)
+    }
+}
+
+export const editPosition=async(token,position)=>{
+    console.log("edit position is ",position);
+    let result
+    const toastId=toast.loading("Editing Position...")
+    try {
+        const response=await ApiConnector("PUT",positionApi.EDIT_POSITION_API,position,{Authorization:`Bearer ${token}`})
+        console.log("Edit response Position are ",response.data.data);
+        if(response.status===200){
+            result=response.data.data
+        }
+        toast.success("Position edited successfully")
+    } catch (error) {
+        console.log("Failed to edit position ",error);
+        toast.error("Failed to edit position") 
+    }
+    toast.dismiss(toastId)
+    return result;
+}

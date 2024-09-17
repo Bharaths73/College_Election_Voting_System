@@ -7,8 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,7 +83,7 @@ public class AdminController {
 
     @DeleteMapping("/candidate/{id}")
     public ResponseEntity<?> deleteCandidate(@PathVariable String id) throws Exception{
-        adminService.deleteCandidate(id);
+        votersService.deleteCandidate(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -102,4 +104,36 @@ public class AdminController {
         adminService.deleteVoter(regNo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+
+    @DeleteMapping("/resetVotes")
+    public ResponseEntity<?> resetVotes() throws Exception{
+        adminService.resetVotes();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/resetVoters")
+    public ResponseEntity<?> resetVoters() throws Exception{
+        adminService.resetVoters();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/resetCandidates")
+    public ResponseEntity<?> resetCandidates() throws Exception{
+        adminService.resetCandidates();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/resetPositions")
+    public ResponseEntity<?> resetPositions() throws Exception{
+        adminService.resetPositions();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/position")
+    public ResponseEntity<?> editPosition(@RequestBody PositionsDto positionsDto) throws Exception{
+        PositionsDto position=adminService.editPosition(positionsDto);
+        return new ResponseEntity<>(position,HttpStatus.OK);
+    }
+
 }

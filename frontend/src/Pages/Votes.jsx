@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Body from '../Components/Common/Body'
-import { DummyVotes } from '../Data/DummyVotes'
-import { getAllVotes } from '../Services/Operations/Votes'
+import { getAllVotes, resetVotes } from '../Services/Operations/Votes'
 import { useSelector } from 'react-redux'
 
 export default function Votes() {
@@ -14,6 +13,12 @@ export default function Votes() {
     if(result){
       setVotes((prev)=>[...prev,...result])
     }
+  }
+
+  async function votesReset(setConfirmationModal){
+    setConfirmationModal(null)
+    await resetVotes(token)
+    setVotes([])
   }
 
   async function handleInfiniteScroll(){
@@ -36,6 +41,6 @@ export default function Votes() {
     getVotes()
   },[page])
   return (
-    <Body collections={votes} name='Votes'/>
+    <Body collections={votes} name='Votes' reset={votesReset}/>
   )
 }

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getAllPositions } from '../Services/Operations/Positions'
 import { getAllCandid, getAllCandidates } from '../Services/Operations/Candidates'
-import { isVoted, vote } from '../Services/Operations/Votes'
+import { isVoted, resetVotes, vote } from '../Services/Operations/Votes'
 import toast from 'react-hot-toast'
+import ConfirmationModal from '../Components/Common/ConfirmationModal'
 
 export default function Vote() {
   const {token,user}=useSelector(state=>state.authentication)
@@ -12,6 +13,7 @@ export default function Vote() {
   const [positions,setPositions]=useState([])
   const [votes,setVotes]=useState([])
   const [voted,setVoted]=useState([])
+  const [confirmationModal,setConfirmationModal]=useState(null)
   console.log("votes are ",votes);
   
 
@@ -46,6 +48,7 @@ const changeHandler=(position,candidate)=>{
 }
 
 const submitHandler=async()=>{
+    setConfirmationModal(null)
     if(votes.length!==positions.length){
        toast.error("You must vote for all positions")
        return
@@ -63,6 +66,12 @@ const alreadyVoted=async()=>{
       return true;
     }
     return false
+}
+
+async function votesReset(setConfirmationModal){
+  setConfirmationModal(null)
+  await resetVotes(token)
+  setVotes([])
 }
 
 useEffect(()=>{
@@ -112,14 +121,22 @@ useEffect(()=>{
               )
            }
           {
-             voted.length<=0 && (
+             voted.length<=0 && positions.length >0 && candidates.length>0 && (
               <div className='flex justify-center'>
-              <button className='py-3 bg-green-400 px-10 rounded-lg mt-10 font-semibold hover:bg-green-300 hover:px-7 transition-all duration-500 ease-in-out hover:py-2' onClick={submitHandler}>Submit</button>
+              <button className='py-3 bg-green-400 px-10 rounded-lg mt-10 font-semibold hover:bg-green-300 hover:px-7 transition-all duration-500 ease-in-out hover:py-2' onClick={()=>setConfirmationModal({
+                            text1:"Are You Sure?",
+                            text2:`Your votes will be submitted`,
+                            btn1name:'Submit',
+                            btn2name:"Cancel",
+                            btn1Handler:()=>submitHandler(),
+                            btn2Handler:()=>setConfirmationModal(null)
+                        })}>Submit</button>
               </div>
              )
           }
         </div>
         </div>
+        {confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}
     </div>
   )
 }

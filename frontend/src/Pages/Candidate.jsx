@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { DummyPositions } from '../Data/DummyPositions';
 import CandidateCard from '../Components/Core/Candidate/CandidateCard';
 import { useSelector } from 'react-redux';
 import { confirmCandidate, regsiterAsCandidates } from '../Services/Operations/Candidates';
 import { positionApi } from '../Services/Api';
 import { getAllPositions } from '../Services/Operations/Positions';
 import toast from 'react-hot-toast';
+import ConfirmationModal from '../Components/Common/ConfirmationModal';
 
 export default function Candidate() {
   const [isCandidate,setIsCandidate]=useState(false);
@@ -24,6 +24,7 @@ export default function Candidate() {
       }
     }
   );
+  const[confirmationModal,setConfirmationModal]=useState(null)
 
   const isACandidate=async()=>{
       const result=await confirmCandidate(token,register);
@@ -102,7 +103,7 @@ export default function Candidate() {
            <div className=' flex flex-col gap-5 justify-center'>
               <p className='sm:text-4xl text-2xl text-slate-600'>Thank you for registering as candidate</p>
               <div className='flex justify-center mt-5'>
-                 <CandidateCard candidate={candidateDetails}/>
+                 <CandidateCard candidate={candidateDetails} setConfirmationModal={setConfirmationModal} setIsCandidate={setIsCandidate}/>
               </div>
            </div>
          ) : (
@@ -130,6 +131,7 @@ export default function Candidate() {
          )
       }
       </div>
+      {confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}
     </div>
   )
 }

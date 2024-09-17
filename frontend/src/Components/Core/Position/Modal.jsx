@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 
-export default function Modal({modalData,addFunc,setModal}) {
+export default function Modal({modalData,addFunc,setModal,editFunc}) {
+  console.log("position id ",modalData.data);
+  
   const [position ,setPosition]=useState({
+    id:modalData.data || null,
     positionName:""
   })
 
@@ -25,7 +28,7 @@ export default function Modal({modalData,addFunc,setModal}) {
                 <input type='text' placeholder='Enter position name' onChange={(e)=>changeHandler(e)} required value={position.positionName} className=' py-2 px-2 border-2 border-gray-400 rounded-md w-72'/>
                 <div className='flex gap-x-2 mt-3'>
                     <button className='px-3 py-2 bg-blue-400 rounded-md' onClick={modalData.btn2Handler}>Cancel</button>
-                    <button className='px-3 py-2 bg-blue-400 rounded-md' onClick={()=>addFunc(position,setModal)}>Submit</button>
+                    <button className='px-3 py-2 bg-blue-400 rounded-md' onClick={!modalData.data ? (()=>addFunc(position,setModal)) : (()=>editFunc(position,setModal))}>Submit</button>
                 </div>
             </div>
         </div>

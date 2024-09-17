@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Card from '../Components/Common/Card'
-import { DummyVoter } from '../Data/DummyVoters'
 import Body from '../Components/Common/Body'
-import { deleteVoterById, getAllVoters } from '../Services/Operations/Voters'
+import { deleteVoterById, getAllVoters, resetVoters } from '../Services/Operations/Voters'
 import { useSelector } from 'react-redux'
 
 
@@ -38,6 +36,11 @@ export default function Voters() {
       console.log("scrolling error ",error);
     }
  }
+ async function votersReset(setConfirmationModal){
+     setConfirmationModal(null)
+     await resetVoters(token)
+     setVoters([])
+ }
 
   useEffect(()=>{
     getVoters()
@@ -49,6 +52,6 @@ export default function Voters() {
   },[])
   
   return (
-      <Body collections={voters} name="Voters" edit={null} deleteFunc={deleteVoter}/>
+      <Body collections={voters} name="Voters" edit={null} deleteFunc={deleteVoter} reset={votersReset}/>
   )
 }
