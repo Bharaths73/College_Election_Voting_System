@@ -28,4 +28,5 @@ public interface VotersRepo extends JpaRepository<Voters,Integer>{
     @Query("DELETE FROM Profile v WHERE v.registerNumber= :regNo")
     @Modifying
     void deleteProfileByRegisterNumber(@Param("regNo") String regNo);
+
 }

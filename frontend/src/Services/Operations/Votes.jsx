@@ -71,7 +71,7 @@ export const isVoted=async(token,user)=>{
 export const resetVotes=async(token)=>{
     const toastId=toast.loading("RESETING......")
     try {
-        const response=await ApiConnector("DELETE",votesApi.IS_VOTED_API,null,{Authorization:`Bearer ${token}`})
+        const response=await ApiConnector("DELETE",votesApi.RESET_VOTES_API,null,{Authorization:`Bearer ${token}`})
         console.log("Reset votes response ",response);
         
         if(response.status===200){

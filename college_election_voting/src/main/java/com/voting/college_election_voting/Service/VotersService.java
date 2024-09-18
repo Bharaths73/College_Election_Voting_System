@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import com.voting.college_election_voting.DTO.CandidateDto;
 import com.voting.college_election_voting.DTO.CandidateRegisterDto;
+import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
@@ -412,4 +413,5 @@ public class VotersService {
         Candidates candidate=candidatesRepo.findByRegisterNumber(id).orElseThrow(()->new Exception("Candidate not found to delete"));
         candidatesRepo.deleteByRegisterNumber(id);
     }
+
 }

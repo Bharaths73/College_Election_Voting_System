@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.util.*;
+
+import com.voting.college_election_voting.Model.Votes;
 
 @Data
 @AllArgsConstructor

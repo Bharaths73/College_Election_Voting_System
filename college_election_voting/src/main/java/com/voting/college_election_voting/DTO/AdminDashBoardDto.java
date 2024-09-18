@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class AdminDashBoardDto {
     private Long NoOfCandidates;
     private Long NoOfPositions;
-    private Long NoOfVoters;
-    private Long NoOfVotes;
+    private int NoOfVoters;
+    private int NoOfVotes;
 }

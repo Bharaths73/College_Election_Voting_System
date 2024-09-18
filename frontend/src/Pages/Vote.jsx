@@ -11,7 +11,7 @@ export default function Vote() {
   const {display}=useSelector(state=>state.sidebar)
   const [candidates,setCandidates]=useState([])
   const [positions,setPositions]=useState([])
-  const [votes,setVotes]=useState([])
+  const [votes,setVotes]=useState([])//redux
   const [voted,setVoted]=useState([])
   const [confirmationModal,setConfirmationModal]=useState(null)
   console.log("votes are ",votes);
@@ -68,11 +68,7 @@ const alreadyVoted=async()=>{
     return false
 }
 
-async function votesReset(setConfirmationModal){
-  setConfirmationModal(null)
-  await resetVotes(token)
-  setVotes([])
-}
+
 
 useEffect(()=>{
   const fetchData = async () => {

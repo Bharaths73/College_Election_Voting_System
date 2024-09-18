@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.voting.college_election_voting.DTO.CandidateDto;
 import com.voting.college_election_voting.DTO.CandidateRegisterDto;
+import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
@@ -110,5 +111,7 @@ public class VotersController {
         votersService.deleteCandidate(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+   
     
 }

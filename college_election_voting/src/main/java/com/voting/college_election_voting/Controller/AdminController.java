@@ -136,4 +136,10 @@ public class AdminController {
         return new ResponseEntity<>(position,HttpStatus.OK);
     }
 
+    @GetMapping("/search_voter/{query}")
+    public ResponseEntity<?> searchVoter(@PathVariable String query) throws Exception{
+        GetVotersDto voter=adminService.searchVoter(query);
+        return new ResponseEntity<>(voter,HttpStatus.OK);
+    }
+
 }

@@ -21,6 +21,7 @@ export const votersApi={
     VOTERS_API:BASE_URL+"/admin/voters",
     DELETE_VOTERS_API:BASE_URL+"/admin/voters",
     RESET_VOTERS_API:BASE_URL+"/admin/resetVoters",
+    SEARCH_VOTERS_API:BASE_URL+"/admin/search_voter",
 }
 
 export const votesApi={
@@ -28,6 +29,10 @@ export const votesApi={
     VOTE_API:BASE_URL+"/voter/vote",
     IS_VOTED_API:BASE_URL+"/voter/isvoted",
     RESET_VOTES_API:BASE_URL+"/admin/resetVotes",
+}
+
+export const dashboardApi={
+    DASHBOARD_API:BASE_URL+"/admin/dashboard",
 }
 
 

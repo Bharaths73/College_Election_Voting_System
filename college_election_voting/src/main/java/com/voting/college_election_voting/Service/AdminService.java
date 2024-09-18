@@ -1,5 +1,6 @@
 package com.voting.college_election_voting.Service;
 
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -157,8 +158,10 @@ public class AdminService {
     public AdminDashBoardDto getDashboardDetails() {
         Long NoOfCandidates=candidatesRepo.count();
         Long NoOfPositions=positionsRepo.count();
-        Long NoOfVoters=votersRepo.count();
-        Long NoOfVotes=votesRepo.count();
+        List<Voters> voters=votersRepo.findAll().stream().filter((voter)->"VOTER".equals(voter.getRole().name())).collect(Collectors.toList());
+        Set<Voters> votes=votesRepo.findAll().stream().map((vote)->vote.getVoter()).collect(Collectors.toSet());
+        int NoOfVoters=voters.size();
+        int NoOfVotes=votes.size();
 
         AdminDashBoardDto dashBoardDto=AdminDashBoardDto.builder().NoOfCandidates(NoOfCandidates).NoOfPositions(NoOfPositions).NoOfVoters(NoOfVoters).NoOfVotes(NoOfVotes).build();
 
@@ -195,8 +198,12 @@ public class AdminService {
 
 
 
+    @Transactional
     public void resetVotes() {
         votesRepo.deleteAll();
+        List<Voters> voters=votersRepo.findAll();
+        voters.forEach((voter)->voter.getProfile().setVoted(false));
+        votersRepo.saveAll(voters);
     }
 
     public void resetVoters() {
@@ -234,4 +241,18 @@ public class AdminService {
         Positions updatedPosition=positionsRepo.save(positions);
         return modelMapper.map(updatedPosition, PositionsDto.class);
     }
+
+
+    public GetVotersDto searchVoter(String query) throws Exception {
+        Optional<Voters> voter=votersRepo.findByRegisterNumber(query.trim());
+        if(!voter.isPresent()){
+            throw new Exception("Voter with register number not present");
+        }
+
+        GetVotersDto votersDto=modelMapper.map(voter.get(), GetVotersDto.class);
+        votersDto.setDepartment(voter.get().getProfile().getDepartment());
+        votersDto.setRegisterNumber(voter.get().getProfile().getRegisterNumber());
+        return votersDto;
+    }
+    
 }

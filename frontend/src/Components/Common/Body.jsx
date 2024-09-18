@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import Modal from '../Core/Position/Modal';
 import ConfirmationModal from './ConfirmationModal';
 
-export default function Body({collections,name,edit,deleteFunc,addFunc,reset}) {
+export default function Body({collections,name,edit,deleteFunc,addFunc,reset,search,searchQuery,searchFunc}) {
   const displaySidebar=useSelector(state=>state.sidebar.display);
   const {role}=useSelector(state=>state.authentication)
   const [modal,setModal]=useState(null)
@@ -45,8 +45,8 @@ export default function Body({collections,name,edit,deleteFunc,addFunc,reset}) {
                    }
 
               <div className='flex sm:justify-end justify-center gap-2 items-center mt-5'>
-                  <input type='search' className='sm:w-96 w-72 py-1 px-3 border-2 border-gray-400 rounded-md' placeholder='Search'/>
-                  <button className='bg-blue-500 p-3 rounded-full'><FaSearch className='text-white'/></button>
+                  <input type='search' className='sm:w-96 w-72 py-1 px-3 border-2 border-gray-400 rounded-md' placeholder='Search' value={searchQuery} onChange={(e)=>search(e.target.value)}/>
+                  <button className='bg-blue-500 p-3 rounded-full'><FaSearch className='text-white' onClick={()=>searchFunc(searchQuery)}/></button>
               </div>
 
             <div className={`grid ${displaySidebar ? "lg:grid-cols-2":"lg:grid-cols-3"} md:grid-cols-2 sm:grid-cols-1 grid-cols-1 gap-2.5 mt-10`}>

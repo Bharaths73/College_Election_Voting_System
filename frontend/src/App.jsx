@@ -17,6 +17,7 @@ const Profile=lazy(()=>import('./Pages/Profile'));
 
 import Public from './Components/Auth/Public';
 import Private from './Components/Auth/Private';
+import Admin from './Components/Auth/Admin';
 
 function App() {
 
@@ -34,12 +35,12 @@ function App() {
       {/* <Route path='/update-password' element={}/> */}
       <Route path='*' element={<Error/>}/>
       <Route element={<Private><Dashboard/></Private>}>
-          <Route path='dashboard/admin/analytics' element={<Private><Analytics/></Private>}/>
+          <Route path='dashboard/admin/analytics' element={<Admin><Analytics/></Admin>}/>
           <Route path='dashboard/profile' element={<Private><Profile/></Private>}/>
           <Route path='dashboard/candidates' element={<Private><Candidates/></Private>}/>
           <Route path='dashboard/positions' element={<Private><Positions/></Private>}/>
-          <Route path='dashboard/admin/votes' element={<Private><Votes/></Private>}/>
-          <Route path='dashboard/admin/voters' element={<Private><Voters/></Private>}/>
+          <Route path='dashboard/admin/votes' element={<Admin><Votes/></Admin>}/>
+          <Route path='dashboard/admin/voters' element={<Admin><Voters/></Admin>}/>
           <Route path='dashboard/vote' element={<Private><Vote/></Private>}/>
           <Route path='dashboard/candidate' element={<Private><Candidate/></Private>}/>
           <Route path='dashboard/settings' element={<Private><Settings/></Private>}/>

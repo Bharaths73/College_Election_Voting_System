@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Body from '../Components/Common/Body'
-import { deleteVoterById, getAllVoters, resetVoters } from '../Services/Operations/Voters'
+import { deleteVoterById, getAllVoters, resetVoters, searchVoterByRegNo } from '../Services/Operations/Voters'
 import { useSelector } from 'react-redux'
 
 
 export default function Voters() {
   const {token} =useSelector(state=>state.authentication)
   const[page,setPage]=useState(0)
+  const [searchQuery,setSearch]=useState("")
   const [voters,setVoters]=useState([])
 
   const getVoters=async()=>{
@@ -25,6 +26,20 @@ export default function Voters() {
     }
  }
 
+ const searchVoter=async(regNo)=>{
+  let result;
+  if(isBlank(regNo)){
+    console.log("register no is ",regNo);
+    result=await getAllVoters(token,page)
+  }
+  else{
+    result=await searchVoterByRegNo(token,regNo)
+  }
+  if(result){
+   setVoters(result)
+  }
+}
+
  async function handleInfiniteScroll(){
     try {
       if(window.innerHeight+document.documentElement.scrollTop>=document.documentElement.scrollHeight-1){
@@ -42,8 +57,16 @@ export default function Voters() {
      setVoters([])
  }
 
+ function isBlank(str){
+  return str.trim()==='';
+ }
+
   useEffect(()=>{
-    getVoters()
+    if(!isBlank(searchQuery)){
+       
+    }else{
+      getVoters()
+    }
   },[page])
 
   useEffect(()=>{
@@ -52,6 +75,6 @@ export default function Voters() {
   },[])
   
   return (
-      <Body collections={voters} name="Voters" edit={null} deleteFunc={deleteVoter} reset={votersReset}/>
+      <Body collections={voters} name="Voters" edit={null} deleteFunc={deleteVoter} reset={votersReset} search={setSearch} searchQuery={searchQuery} searchFunc={searchVoter}/>
   )
 }
