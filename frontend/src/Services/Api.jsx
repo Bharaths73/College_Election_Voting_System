@@ -48,5 +48,6 @@ export const positionApi={
     POSITION_API:BASE_URL+"/admin/position",
     EDIT_POSITION_API:BASE_URL+"/admin/position",
     DELETE_POSITION_API:BASE_URL+"/admin/position",
+    SEARCH_POSITION_API:BASE_URL+"/voter/search_position",
     RESET_POSITIONS_API:BASE_URL+"/admin/resetPositions"
 }

@@ -90,3 +90,24 @@ export const editPosition=async(token,position)=>{
     toast.dismiss(toastId)
     return result;
 }
+
+export const searchPositionByName=async(token,name)=>{
+    let result=[];
+    console.log("position name is ",name);
+    
+    const toastId=toast.loading("Getting Position...")
+    try {
+        const response=await ApiConnector("GET",positionApi.SEARCH_POSITION_API+`/${name}`,null,{Authorization:`Bearer ${token}`})
+        console.log("Positions are ",response.data.data);
+        if(response){
+            result.push(response.data.data)
+
+        }
+        toast.success("Fetched All Positions")
+    } catch (error) {
+        console.log("Failed to fetch position ",error);
+        toast.error("Failed to fetch position")
+    }
+    toast.dismiss(toastId)
+    return result;
+}

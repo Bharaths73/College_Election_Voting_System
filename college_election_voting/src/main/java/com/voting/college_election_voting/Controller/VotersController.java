@@ -117,6 +117,12 @@ public class VotersController {
         CandidateDto candidateDto=votersService.searchCandidate(query);
         return new ResponseEntity<>(candidateDto,HttpStatus.OK);
     }
+
+    @GetMapping("/search_position/{query}")
+    public ResponseEntity<?> searchPosition(@PathVariable String query) throws Exception{
+        PositionsDto positionsDto=votersService.searchPosition(query);
+        return new ResponseEntity<>(positionsDto,HttpStatus.OK);
+    }
    
     
 }

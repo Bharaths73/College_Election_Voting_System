@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.voting.college_election_voting.DTO.AdminOtpDto;
@@ -452,4 +453,16 @@ public class VotersService {
         return candidateDto;
     }
 
+
+
+    public PositionsDto searchPosition(String query) throws Exception {
+        List<Positions> positions=positionsRepo.findAll();
+        List<Positions> position=positions.stream().filter((pos)->pos.getPositionName().equalsIgnoreCase(query.trim())).collect(Collectors.toList());
+        if(position.size()!=0){
+            return modelMapper.map(position.get(0), PositionsDto.class);
+        }
+        else{
+            throw new Exception("Position not found");
+        }
+    }
 }
