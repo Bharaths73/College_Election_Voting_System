@@ -5,6 +5,7 @@ import { getAllCandid, getAllCandidates } from '../Services/Operations/Candidate
 import { isVoted, resetVotes, vote } from '../Services/Operations/Votes'
 import toast from 'react-hot-toast'
 import ConfirmationModal from '../Components/Common/ConfirmationModal'
+import { getElectionActiveStatus } from '../Services/Operations/Election'
 
 export default function Vote() {
   const {token,user}=useSelector(state=>state.authentication)
@@ -14,6 +15,7 @@ export default function Vote() {
   const [votes,setVotes]=useState([])//redux
   const [voted,setVoted]=useState([])
   const [confirmationModal,setConfirmationModal]=useState(null)
+  const[isActive,setIsActive]=useState(false)
   console.log("votes are ",votes);
   
 
@@ -68,14 +70,25 @@ const alreadyVoted=async()=>{
     return false
 }
 
+const getElectionStatus=async()=>{
+  const result=await getElectionActiveStatus(token);
+  if(result){
+    setIsActive(result?.startOrStop)
+  }
+  return result?.startOrStop
+}
 
 
 useEffect(()=>{
   const fetchData = async () => {
-    const isVoted=await alreadyVoted();
-    if(!isVoted){
-      await getPositions(); 
-      await getCandidates();
+    const result=await getElectionStatus()
+    
+    if(result){
+      const isVoted=await alreadyVoted();
+      if(!isVoted){
+        await getPositions(); 
+        await getCandidates();
+      }
     }  
   };
   fetchData();
@@ -85,7 +98,9 @@ useEffect(()=>{
     <div className=''>
         <div className='ml-5 mr-5 pb-10'>
         <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Vote</h1>
-        <div className='mt-10'>
+        {
+          isActive ? (
+            <div className='mt-10'>
            {
               voted.length>0 ? (
                 <div className='text-2xl flex justify-center'>Thank you for voting</div>
@@ -131,6 +146,10 @@ useEffect(()=>{
              )
           }
         </div>
+          ) : (
+            <div className='text-2xl flex justify-center'>Election Not Yet Started</div>
+          )
+        }
         </div>
         {confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}
     </div>

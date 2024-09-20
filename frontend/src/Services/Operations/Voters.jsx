@@ -10,6 +10,12 @@ export const getAllVoters=async(token,num,limit="15")=>{
         console.log("voters are ",response.data.data);
         if(response){
             result=response.data.data
+            
+            result.forEach((res)=>{
+                console.log("profile pic url ",res.profilePic);
+                res.profilePic=res.profilePic ? res.profilePic : `https://api.dicebear.com/5.x/initials/svg?seed=${res.firstName} ${res.lastName}`
+                console.log("profile pic url ",res.profilePic);
+            })
         }
         toast.success("Fetched All Voters")
     } catch (error) {
@@ -27,6 +33,7 @@ export const searchVoterByRegNo=async(token,regNo)=>{
         const response=await ApiConnector("GET",votersApi.SEARCH_VOTERS_API+`/${regNo}`,null,{Authorization:`Bearer ${token}`})
         console.log("voters are ",response.data.data);
         if(response){
+            response.data.data.profilePic=response.data.data.profilePic ? response.data.data.profilePic : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.data.firstName} ${response.data.data.lastName}`
             result.push(response.data.data)
         }
         toast.success("Fetched All Voters")

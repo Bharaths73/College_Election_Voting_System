@@ -35,6 +35,8 @@ public class VoterRegisterDto {
     //      message = "Password must be between 8 and 20 characters long, and include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
     private String password;
     
+    private String role;
+    
     private Profile profile;
 
     @NotBlank(message = "OTP cannot be blank")

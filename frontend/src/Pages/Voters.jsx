@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Body from '../Components/Common/Body'
 import { deleteVoterById, getAllVoters, resetVoters, searchVoterByRegNo } from '../Services/Operations/Voters'
 import { useSelector } from 'react-redux'
+import isBlank from '../Utils/isBlank'
 
 
 export default function Voters() {
@@ -13,16 +14,23 @@ export default function Voters() {
   const getVoters=async()=>{
      const result=await getAllVoters(token,page)
      if(result){
-      setVoters((prev)=>[...prev ,...result])
-     }
+      setVoters((prev)=>{
+        const combined=[...prev ,...result]
+      const uniqueVoters = Array.from(
+        new Map(combined.map(voter => [voter.registerNumber, voter])).values()
+      );// Ensure uniqueness
+      return uniqueVoters;
+  })
   }
+}
 
   const deleteVoter=async(regNo,setModal)=>{
     setModal(null)
     await deleteVoterById(token,regNo)
     const result=await getAllVoters(token,page)
     if(result){
-     setVoters((prev)=>[...prev ,...result])
+    //  setVoters((prev)=>[...prev ,...result])
+    setVoters(result)
     }
  }
 
@@ -57,9 +65,7 @@ export default function Voters() {
      setVoters([])
  }
 
- function isBlank(str){
-  return str.trim()==='';
- }
+ 
 
   useEffect(()=>{
     if(!isBlank(searchQuery)){

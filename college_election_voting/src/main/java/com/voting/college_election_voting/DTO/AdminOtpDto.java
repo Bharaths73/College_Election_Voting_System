@@ -6,17 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OTPDto {
-
+public class AdminOtpDto {
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Should satisfy email format")
     private String email;
-
-    @NotBlank(message = "Register Number cannot be Blank")
-    private String registerNumber;
 
     private String role;
 }

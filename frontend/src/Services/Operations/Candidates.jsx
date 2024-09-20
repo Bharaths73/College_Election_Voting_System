@@ -10,11 +10,34 @@ export const getAllCandidates=async(token,num,limit="15")=>{
         console.log("candidates are ",response.data.data);
         if(response){
             result=response.data.data
+            result.forEach((res)=>{
+                res.profilePic=res.profilePic ? res.profilePic : `https://api.dicebear.com/5.x/initials/svg?seed=${res.firstName} ${res.lastName}`
+            })
         }
         toast.success("Fetched All Candidates")
     } catch (error) {
         console.log("Failed to fetch candidates ",error);
         toast.error("Failed to fetch candidates")
+    }
+    toast.dismiss(toastId)
+    return result;
+}
+
+export const searchCandidateByRegNo=async(token,regNo)=>{
+    let result=[];
+    const toastId=toast.loading("Getting Candidate...")
+    try {
+        const response=await ApiConnector("GET",candidateApi.SEARCH_CANDIDATE_API+`/${regNo}`,null,{Authorization:`Bearer ${token}`})
+        console.log("candidates are ",response.data.data);
+        if(response){
+            response.data.data.profilePic=response.data.data.profilePic ? response.data.data.profilePic : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.data.firstName} ${response.data.data.lastName}`
+            result.push(response.data.data)
+
+        }
+        toast.success("Fetched All Candidates")
+    } catch (error) {
+        console.log("Failed to fetch candidate ",error);
+        toast.error("Failed to fetch candidate")
     }
     toast.dismiss(toastId)
     return result;
@@ -28,6 +51,11 @@ export const getAllCandid=async(token)=>{
         console.log("candidates are ",response.data.data);
         if(response){
             result=response.data.data
+            result.forEach((res)=>{
+                console.log("profile pic url ",res.profilePic);
+                res.profilePic=res.profilePic ? res.profilePic : `https://api.dicebear.com/5.x/initials/svg?seed=${res.firstName} ${res.lastName}`
+                console.log("profile pic url ",res.profilePic);
+            })
         }
         toast.success("Fetched All Candidates")
     } catch (error) {
@@ -49,6 +77,7 @@ export const confirmCandidate=async(token,data)=>{
         console.log("Is a candidate ",response.data.data);
         if(response){
             result=response.data.data
+            result.profilePicUrl=result.profilePicUrl ? result.profilePicUrl : `https://api.dicebear.com/5.x/initials/svg?seed=${result.firstName} ${result.lastName}`
         }
     } catch (error) {
         console.log("Failed to check if you are candidate ",error);

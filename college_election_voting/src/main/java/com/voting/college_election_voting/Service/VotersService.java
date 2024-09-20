@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import com.voting.college_election_voting.DTO.AdminOtpDto;
 import com.voting.college_election_voting.DTO.CandidateDto;
 import com.voting.college_election_voting.DTO.CandidateRegisterDto;
 import com.voting.college_election_voting.DTO.GetVotersDto;
@@ -89,7 +91,7 @@ public class VotersService {
 
 
     @Transactional
-    public RegisteredVoterResponse register(VoterRegisterDto voter, MultipartFile file) throws Exception{
+    public RegisteredVoterResponse register(VoterRegisterDto voter) throws Exception{
         System.out.println("Profile Success");
         Optional<Voters> DbVoter=votersRepo.findByRegisterNumber(voter.getProfile().getRegisterNumber());
         Optional<OTP> otp=otpRepo.findByEmail(voter.getEmail());
@@ -110,10 +112,10 @@ public class VotersService {
         Voters Voter=modelMapper.map(voter, Voters.class);
         String password=Voter.getPassword();
         Voter.setPassword(bCryptPasswordEncoder.encode(password));
-        Map data=cloudinaryImageService.upload(file);
-        Voter.setProfilePicUrl((String)data.get("url"));
-        Voter.setProficePicId((String)data.get("public_id"));
-        Voter.setRole(Role.VOTER);
+        // Map data=cloudinaryImageService.upload(file);
+        // Voter.setProfilePicUrl((String)data.get("url"));
+        // Voter.setProficePicId((String)data.get("public_id"));
+        Voter.setRole(Role.valueOf(voter.getRole()));
         Voters registeredVoter=votersRepo.save(Voter);
         removeOtp(otp.get());
         RegisteredVoterResponse voterRegisterDto=modelMapper.map(registeredVoter,RegisteredVoterResponse.class);
@@ -140,6 +142,20 @@ public class VotersService {
         }
         else{
             String email=voter.getEmail();
+            checkInDb(email);
+        }
+    }
+
+    public void sendOTPToAdmin(AdminOtpDto admin) throws Exception{
+
+        Optional<Voters> DbVoter=votersRepo.findByEmail(admin.getEmail());
+
+        if(DbVoter.isPresent()){
+            throw new Exception("Email is already Registered");
+        }
+
+        else{
+            String email=admin.getEmail();
             checkInDb(email);
         }
     }
@@ -412,6 +428,28 @@ public class VotersService {
     public void deleteCandidate(String id) throws Exception{
         Candidates candidate=candidatesRepo.findByRegisterNumber(id).orElseThrow(()->new Exception("Candidate not found to delete"));
         candidatesRepo.deleteByRegisterNumber(id);
+    }
+
+
+
+    public CandidateDto searchCandidate(String query) throws Exception {
+        Optional<Candidates> dbCandidate=candidatesRepo.findByRegisterNumber(query.trim());
+        if(!dbCandidate.isPresent()){
+            throw new Exception("Candidate with register number not present");
+        }
+        Candidates candidate=dbCandidate.get();
+        CandidateDto candidateDto=CandidateDto.builder()
+            .firstName(candidate.getFirstname())
+            .lastName(candidate.getLastName())
+            .department(candidate.getDepartment())
+            .position(candidate.getPosition())
+            .profilePic(candidate.getProfilePicUrl())
+            .registerNumber(candidate.getRegisterNumber())
+            .votes(candidate.getVotes().size())
+            .build();
+        // votersDto.setDepartment(voter.get().getProfile().getDepartment());
+        // votersDto.setRegisterNumber(voter.get().getProfile().getRegisterNumber());
+        return candidateDto;
     }
 
 }

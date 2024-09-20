@@ -53,7 +53,7 @@ public class Voters {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "voter")
+    @OneToMany(mappedBy = "voter", cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Votes> votes;
 

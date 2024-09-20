@@ -18,6 +18,7 @@ const Profile=lazy(()=>import('./Pages/Profile'));
 import Public from './Components/Auth/Public';
 import Private from './Components/Auth/Private';
 import Admin from './Components/Auth/Admin';
+import { OTP} from './Pages/OTP';
 
 function App() {
 
@@ -28,9 +29,9 @@ function App() {
       <Routes>
       <Route path='/' element={<Public><Login/></Public>}/>
       <Route path='/admin/login' element={<Public><Login/></Public>}/>
-      {/* <Route path='/otp' element={<Otp/>}/>*/}
       <Route path='/register' element={<Public><Register/></Public>}/>
       <Route path='/admin/register' element={<Register/>}/>
+      <Route path='/otp' element={<Public><OTP/></Public>}/>
       {/* <Route path='/forgot-password' element={}/> */}
       {/* <Route path='/update-password' element={}/> */}
       <Route path='*' element={<Error/>}/>

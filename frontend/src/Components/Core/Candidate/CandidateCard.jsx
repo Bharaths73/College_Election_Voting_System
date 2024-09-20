@@ -16,7 +16,7 @@ export default function CandidateCard({candidate,setConfirmationModal,setIsCandi
 
   return (
     <div className='flex flex-col gap-5 items-center p-10 rounded-lg bg-blue-300 max-w-max shadow-md shadow-blue-900 border-4 border-slate-500'>
-        <img src={Profile} width={150} height={150} className='object-cover rounded-lg' loading='lazy'/>
+        <img src={candidate.profilePicUrl} width={150} height={150} className='object-cover rounded-lg' loading='lazy'/>
         <div className='flex flex-col gap-2'>
             <div className='flex gap-1'>
                 <p className='font-semibold'>Name: </p>

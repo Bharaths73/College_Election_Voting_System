@@ -49,7 +49,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception{
         return http.csrf(customizor->customizor.disable())
-                    .authorizeHttpRequests(req->req.requestMatchers(HttpMethod.OPTIONS).permitAll().requestMatchers("/api/admin/login","/api/admin/register","/api/voter/sendOtp","/api/voter/login","/api/voter/register")
+                    .authorizeHttpRequests(req->req.requestMatchers(HttpMethod.OPTIONS).permitAll().requestMatchers("/api/admin/login","/api/admin/register","/api/voter/sendOtp","/api/admin/sendOtp","/api/voter/login","/api/voter/register")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

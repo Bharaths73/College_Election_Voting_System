@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.voting.college_election_voting.DTO.AdminDashBoardDto;
 import com.voting.college_election_voting.DTO.AdminLoginDto;
+import com.voting.college_election_voting.DTO.AdminOtpDto;
 import com.voting.college_election_voting.DTO.AdminRegisteredDto;
 import com.voting.college_election_voting.DTO.CandidateDto;
 import com.voting.college_election_voting.DTO.GetVotersDto;
+import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
+import com.voting.college_election_voting.DTO.StrartOrStopElectionDto;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
 import com.voting.college_election_voting.DTO.VotesDto;
@@ -141,5 +144,23 @@ public class AdminController {
         GetVotersDto voter=adminService.searchVoter(query);
         return new ResponseEntity<>(voter,HttpStatus.OK);
     }
+
+    @PostMapping("/sendOtp")
+    public ResponseEntity<VoterRegisterDto> sendOtp(@RequestBody @Valid AdminOtpDto admin) throws Exception{
+            votersService.sendOTPToAdmin(admin);
+            return new ResponseEntity<>(HttpStatus.OK);
+    } 
+
+    @PostMapping("/start_or_stop")
+    public ResponseEntity<StrartOrStopElectionDto> startOrStopElection(@RequestBody StrartOrStopElectionDto strartOrStopElectionDto) throws Exception{
+        StrartOrStopElectionDto electionDto=adminService.startOrStopElection(strartOrStopElectionDto);
+            return new ResponseEntity<>(electionDto,HttpStatus.OK);
+    } 
+
+    @GetMapping("/status")
+    public ResponseEntity<StrartOrStopElectionDto> checkStatus() throws Exception{
+        StrartOrStopElectionDto electionDto=adminService.checkStatus();
+            return new ResponseEntity<>(electionDto,HttpStatus.OK);
+    } 
 
 }

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {Chart,ArcElement,Tooltip,Legend,CategoryScale,LinearScale,PointElement,LineElement} from 'chart.js'
+import {Chart,ArcElement,Tooltip,Legend,CategoryScale,LinearScale,PointElement,LineElement, scales} from 'chart.js'
 import {Pie,Line} from 'react-chartjs-2';
 import { getAllPositions } from '../Services/Operations/Positions';
 import { getAllCandid, getAllCandidates } from '../Services/Operations/Candidates';
 import { getDashboardDetails } from '../Services/Operations/Dashboard';
 import { Link } from 'react-router-dom';
+import { getElectionActiveStatus, updateElectionActiveStatus } from '../Services/Operations/Election';
+import ConfirmationModal from '../Components/Common/ConfirmationModal';
 
 Chart.register(ArcElement,Tooltip,Legend,CategoryScale,LinearScale,PointElement,LineElement)
 
@@ -15,6 +17,8 @@ export default function Analytics() {
   const [positions,setPositions]=useState([])
   const [candidates,setCandidates]=useState([])
   const [dashboard,setDashboard]=useState({})
+  const [isActive,setIsActive]=useState(false)
+  const [confirmationModal,setConfirmationModal]=useState(null)
 
   const getCandidates=async()=>{
     const result=await getAllCandid(token);
@@ -62,8 +66,24 @@ const getAllDetails=async()=>{
   }
 }
 
+const getElectionStatus=async()=>{
+  const result=await getElectionActiveStatus(token);
+  if(result){
+    setIsActive(result?.startOrStop)
+  }
+}
+
+const  updateElectionStatus=async()=>{
+  setConfirmationModal(null)
+  const result=await updateElectionActiveStatus(token,isActive);
+  if(result){
+    setIsActive(result?.startOrStop)
+  }
+}
+
 useEffect(()=>{
   const fetchData = async () => {
+      await getElectionStatus();
       await getAllDetails()
       await getPositions(); 
       await getCandidates();
@@ -71,7 +91,7 @@ useEffect(()=>{
   fetchData();
 },[])
 
-let candidate=[];
+
   
   const options={
     responsive: true,
@@ -79,6 +99,13 @@ let candidate=[];
       legend: {
         display:true,
         position: 'top',
+        labels: {
+          color: 'black', // Set the label "Votes" to dark (black)
+          font: {
+            size: 20, // Set font size to large
+            weight: 'bold', // Optional: Make the label bold
+          },
+        },
       },
       title: {
         display: true,
@@ -86,22 +113,40 @@ let candidate=[];
         position: 'top',
       },  
     },
-    x: {
-      position: 'bottom', 
-      ticks: {
-        display: true, 
+    scales:{
+      x: {
+        position: 'bottom', 
+        ticks: {
+          display: true, 
+          color:"black"
+        },
+        // grid: {
+        //   color: 'gray', // Set grid line color to gray
+        // },
+      },
+      y: {
+        beginAtZero: true,
+        color:"black"
+        // grid: {
+        //   color: 'gray', // Set grid line color to gray
+        // },
       },
     },
-    y: {
-      beginAtZero: true,
-    },
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
   }
   
   return (
     <div className=''>
     <div className='text-black w-full ml-5 mr-5 pb-10'>
       <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Election Analytics</h1>
+      <button className={`px-7 py-3 ${isActive ? "bg-red-500" :"bg-green-500"} text-white rounded-md text-base font-semibold mt-5`} onClick={()=>setConfirmationModal({
+                          text1:"Are You Sure?",
+                          text2:`${isActive ? "Election will be stoped" : "Election will start"}`,
+                          btn1name:`${isActive ? "STOP" : "START"}`,
+                          btn2name:"Cancel",
+                          btn1Handler:()=>updateElectionStatus(),
+                          btn2Handler:()=>setConfirmationModal(null)
+                      })}>{`${isActive ? "STOP ELECTION" : "START ELECTION"}`}</button>
       <div className='mt-10 flex flex-col w-full sm:pr-10 pr-5 gap-y-16'>
       {/* <div className='mt-20 w-80 h-80'>
         <Pie data={{
@@ -146,9 +191,16 @@ let candidate=[];
               datasets:[{
                 label:position.positionName,
                 data:filterVotes(position),
-                backgroundColor:getRandomColors(10),
                 hoverOffset: 30,
                 borderColor: "blue", 
+                fill:true,
+                backgroundColor:getRandomColors(10),
+                tension: 0.4, 
+                pointStyle:"rect",
+                pointRadius:7,
+                pointHoverRadius:10,
+                pointBackgroundColor:"blue",
+                pointHoverBackgroundColor:"blue",
               }, 
             ]
             }} options={options} />
@@ -158,6 +210,9 @@ let candidate=[];
       </div>
       </div>
     </div>
+    {
+      confirmationModal && <ConfirmationModal modalData={confirmationModal}/>
+    }
     </div>
   )
 }

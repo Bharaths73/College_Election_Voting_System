@@ -46,8 +46,8 @@ public class VotersController {
    } 
 
    @PostMapping("/register")
-   public ResponseEntity<RegisteredVoterResponse> register(@RequestPart @Valid VoterRegisterDto voter, @RequestPart(required = false) MultipartFile file) throws Exception{
-          RegisteredVoterResponse response=votersService.register(voter, file);
+   public ResponseEntity<RegisteredVoterResponse> register(@RequestBody @Valid VoterRegisterDto voter) throws Exception{
+          RegisteredVoterResponse response=votersService.register(voter);
           return new ResponseEntity<>(response,HttpStatus.OK);
    }
 
@@ -112,6 +112,11 @@ public class VotersController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/search_candidate/{query}")
+    public ResponseEntity<?> searchCandidate(@PathVariable String query) throws Exception{
+        CandidateDto candidateDto=votersService.searchCandidate(query);
+        return new ResponseEntity<>(candidateDto,HttpStatus.OK);
+    }
    
     
 }

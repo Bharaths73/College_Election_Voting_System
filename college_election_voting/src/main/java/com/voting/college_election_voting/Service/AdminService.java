@@ -18,18 +18,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import com.voting.college_election_voting.DTO.AdminDashBoardDto;
 import com.voting.college_election_voting.DTO.AdminLoginDto;
+import com.voting.college_election_voting.DTO.AdminOtpDto;
 import com.voting.college_election_voting.DTO.AdminRegisteredDto;
 import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
+import com.voting.college_election_voting.DTO.StrartOrStopElectionDto;
 import com.voting.college_election_voting.DTO.VotesDto;
 import com.voting.college_election_voting.Model.Candidates;
 import com.voting.college_election_voting.Model.Positions;
+import com.voting.college_election_voting.Model.StrartOrStopElection;
 import com.voting.college_election_voting.Model.Voters;
 import com.voting.college_election_voting.Model.Votes;
 import com.voting.college_election_voting.Repository.CandidatesRepo;
 import com.voting.college_election_voting.Repository.PositionsRepo;
+import com.voting.college_election_voting.Repository.StrartOrStopElectionRepo;
 import com.voting.college_election_voting.Repository.VotersRepo;
 import com.voting.college_election_voting.Repository.VotesRepo;
+
+import jakarta.validation.Valid;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,9 +50,10 @@ public class AdminService {
     private VotersRepo votersRepo;
     private ModelMapper modelMapper;
     private VotesRepo votesRepo;
+    private StrartOrStopElectionRepo strartOrStopElectionRepo;
 
 
-    public AdminService(AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo,VotersRepo votersRepo,ModelMapper modelMapper,VotesRepo votesRepo) {
+    public AdminService(AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo,VotersRepo votersRepo,ModelMapper modelMapper,VotesRepo votesRepo,StrartOrStopElectionRepo strartOrStopElectionRepo) {
         this.authenticationManager = authenticationManager;
         this.jwtService=jwtService;
         this.candidatesRepo=candidatesRepo;
@@ -54,6 +61,7 @@ public class AdminService {
         this.votersRepo=votersRepo;
         this.modelMapper=modelMapper;
         this.votesRepo=votesRepo;
+        this.strartOrStopElectionRepo=strartOrStopElectionRepo;
     }
 
 
@@ -192,8 +200,11 @@ public class AdminService {
         if(!voter.isPresent()){
             throw new Exception("Voter is not present in database");
         }
+        // votesRepo.deleteAll(votesRepo.findByVoterId(voter.get().getId()));
+        votersRepo.deleteVotesById(voter.get().getId());
         votersRepo.deleteVoterByRegisterNumber(regNo);
         votersRepo.deleteProfileByRegisterNumber(regNo);
+        
     }
 
 
@@ -253,6 +264,28 @@ public class AdminService {
         votersDto.setDepartment(voter.get().getProfile().getDepartment());
         votersDto.setRegisterNumber(voter.get().getProfile().getRegisterNumber());
         return votersDto;
+    }
+
+
+
+    public StrartOrStopElectionDto startOrStopElection(StrartOrStopElectionDto electionDto) {
+        List<StrartOrStopElection> isElectionActive=strartOrStopElectionRepo.findAll();
+        if(isElectionActive.size()!=0){
+            StrartOrStopElection strartOrStopElection=isElectionActive.get(0);
+            strartOrStopElection.setStartOrStop(!isElectionActive.get(0).isStartOrStop());
+            return modelMapper.map( strartOrStopElectionRepo.save(strartOrStopElection), StrartOrStopElectionDto.class);
+        }
+        return modelMapper.map(strartOrStopElectionRepo.save(modelMapper.map(electionDto, StrartOrStopElection.class)),StrartOrStopElectionDto.class);
+        
+    }
+
+    public StrartOrStopElectionDto checkStatus() {
+        List<StrartOrStopElection> isElectionActive=strartOrStopElectionRepo.findAll();
+       if(isElectionActive.size()!=0){
+        StrartOrStopElection strartOrStopElection=isElectionActive.get(0);
+        return modelMapper.map(strartOrStopElection,StrartOrStopElectionDto.class);
+       }
+       return StrartOrStopElectionDto.builder().startOrStop(false).build();
     }
     
 }
