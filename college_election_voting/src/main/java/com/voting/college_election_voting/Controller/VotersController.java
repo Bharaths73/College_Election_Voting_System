@@ -2,6 +2,7 @@ package com.voting.college_election_voting.Controller;
 
 import java.util.List;
 
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,7 @@ import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
+import com.voting.college_election_voting.DTO.UpdateUserDto;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
 import com.voting.college_election_voting.DTO.VotingDto;
@@ -124,5 +127,22 @@ public class VotersController {
         return new ResponseEntity<>(positionsDto,HttpStatus.OK);
     }
    
+    @PostMapping("/profile_pic")
+    public ResponseEntity<?> updateProfilePic(@RequestPart MultipartFile file,@RequestParam(required = false) String pic_id) throws Exception{
+        RegisteredVoterResponse voterRegisterDto=votersService.updateProfilePic(file,pic_id);
+        return new ResponseEntity<>(voterRegisterDto,HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update_profile")
+    public ResponseEntity<?> updateProfile(@RequestPart UpdateUserDto profile) throws Exception{
+        RegisteredVoterResponse voterRegisterDto=votersService.updateProfile(profile);
+        return new ResponseEntity<>(voterRegisterDto,HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update_password")
+    public ResponseEntity<?> updatePassword(@RequestPart String oldPassword,String newPassword) throws Exception{
+        RegisteredVoterResponse voterRegisterDto=votersService.updatePassword(oldPassword,newPassword);
+        return new ResponseEntity<>(voterRegisterDto,HttpStatus.OK);
+    }
     
 }

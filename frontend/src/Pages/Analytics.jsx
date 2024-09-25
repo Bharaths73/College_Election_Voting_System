@@ -139,6 +139,7 @@ useEffect(()=>{
     <div className=''>
     <div className='text-black w-full ml-5 mr-5 pb-10'>
       <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Election Analytics</h1>
+      <div className='flex md:flex-row flex-col md:justify-between w-full sm:pr-10 pr-5'>
       <button className={`px-7 py-3 ${isActive ? "bg-red-500" :"bg-green-500"} text-white rounded-md text-base font-semibold mt-5`} onClick={()=>setConfirmationModal({
                           text1:"Are You Sure?",
                           text2:`${isActive ? "Election will be stoped" : "Election will start"}`,
@@ -147,6 +148,7 @@ useEffect(()=>{
                           btn1Handler:()=>updateElectionStatus(),
                           btn2Handler:()=>setConfirmationModal(null)
                       })}>{`${isActive ? "STOP ELECTION" : "START ELECTION"}`}</button>
+      </div>
       <div className='mt-10 flex flex-col w-full sm:pr-10 pr-5 gap-y-16'>
       {/* <div className='mt-20 w-80 h-80'>
         <Pie data={{

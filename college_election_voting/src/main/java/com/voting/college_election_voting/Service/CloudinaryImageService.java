@@ -40,7 +40,7 @@ public class CloudinaryImageService {
         }
     }
 
-    public Map deleteFile(String publicId, String resourceType) throws Exception {
+    public Map deleteFile(String publicId) throws Exception {
         Map options = ObjectUtils.asMap("resource_type", "image");
         return cloudinary.uploader().destroy(publicId, options);
     }

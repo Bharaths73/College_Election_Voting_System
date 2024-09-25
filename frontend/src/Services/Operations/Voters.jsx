@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { AuthApi, candidateApi, votersApi } from "../Api";
 import { ApiConnector } from "../ApiConnector";
+import { setUser } from "../../Redux/Slices/AuthSlice";
 
 export const getAllVoters=async(token,num,limit="15")=>{
     let result=[];
@@ -74,4 +75,70 @@ export const resetVoters=async(token)=>{
     finally{
         toast.dismiss(toastId)
     }
+}
+
+export function uploadFileToBackend(file,token,pic_id=null){
+    return async(dispatch)=>{
+        const toastId=toast.loading("Uploading...")
+        try{
+            const response=await ApiConnector("POST",votersApi.UPADATE_PROFILE_PIC_API+`?pic_id=${pic_id}`,file,{"Content-Type": "multipart/form-data",Authorization:`Bearer ${token}`})
+
+            console.log("update profile pic response is ",response);
+
+            if(response.status===200){
+                dispatch(setUser(response.data.data))
+                localStorage.setItem('user',JSON.stringify(response.data.data))
+                toast.success("Profile picture uploaded successfully")
+            }
+        }
+        catch(err){
+            console.log("error while uploading file ",err);
+            toast.error("Failed to upload profile picture")
+        }
+        toast.dismiss(toastId)
+    }
+}
+
+export function updateUser(data,token){
+    return async(dispatch)=>{
+        const toastId=toast.loading("Updating Please wait")
+        for (let [key, value] of data.entries()) {
+            console.log(key, value);
+        }
+        
+        try{
+            const response=await ApiConnector("PUT",votersApi.UPADATE_PROFILE_API,data,{"Content-Type": "multipart/form-data",Authorization:`Bearer ${token}`})
+
+            console.log("update profile ",response);
+
+            if(response.status===200){
+                dispatch(setUser(response.data.data))
+                localStorage.setItem('user',JSON.stringify(response.data.data))
+                toast.success("Profile updated successfully")
+            }
+        }
+        catch(err){
+            console.log("error while updating ",err);
+            toast.error("Failed to update")
+        }
+        toast.dismiss(toastId)
+    }
+}
+
+export async function updatePassword(data,token){
+        const toastId=toast.loading("Updating Please wait")
+        try{
+            const response=await ApiConnector("PUT",votersApi.UPDATE_PASSWORD_API,data,{"Content-Type": "multipart/form-data",Authorization:`Bearer ${token}`})
+
+            console.log("update password ",response);
+
+            if(response.status===200){
+                toast.success("Password changed successfully")
+            }
+        }
+        catch(err){
+            console.log("error while updating ",err);
+            toast.error("Failed to update")
+        }
+        toast.dismiss(toastId)
 }

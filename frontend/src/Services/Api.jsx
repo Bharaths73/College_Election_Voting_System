@@ -29,6 +29,9 @@ export const votersApi={
     DELETE_VOTERS_API:BASE_URL+"/admin/voters",
     RESET_VOTERS_API:BASE_URL+"/admin/resetVoters",
     SEARCH_VOTERS_API:BASE_URL+"/admin/search_voter",
+    UPADATE_PROFILE_PIC_API:BASE_URL+"/voter/profile_pic",
+    UPADATE_PROFILE_API:BASE_URL+"/voter/update_profile",
+    UPDATE_PASSWORD_API:BASE_URL+"/voter/update_password"
 }
 
 export const votesApi={

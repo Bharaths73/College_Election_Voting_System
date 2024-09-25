@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 
 export default function Profile() {
   const {user,role}=useSelector(state=>state.authentication)
+  console.log("user details ",user);
+  
   return (
     <div>
       <div className='ml-5 mr-5 pb-10'>

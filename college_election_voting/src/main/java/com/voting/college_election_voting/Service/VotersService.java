@@ -2,13 +2,18 @@ package com.voting.college_election_voting.Service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Field;
+import java.nio.file.attribute.UserPrincipal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import javax.naming.AuthenticationException;
 
 import com.voting.college_election_voting.DTO.AdminOtpDto;
 import com.voting.college_election_voting.DTO.CandidateDto;
@@ -17,6 +22,7 @@ import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
+import com.voting.college_election_voting.DTO.UpdateUserDto;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
 import com.voting.college_election_voting.DTO.VotingDto;
@@ -39,7 +45,6 @@ import com.voting.college_election_voting.Repository.VotesRepo;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import java.util.ArrayList;
@@ -52,6 +57,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -464,5 +470,130 @@ public class VotersService {
         else{
             throw new Exception("Position not found");
         }
+    }
+
+
+
+    public RegisteredVoterResponse updateProfilePic(MultipartFile file,String pic_id) throws Exception {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null){
+            throw new AuthenticationException("Unauthenticated");
+        }
+        VoterUserPrinciples principal=(VoterUserPrinciples)authentication.getPrincipal();
+        String email=principal.getEmail();
+        Optional<Voters> voter=votersRepo.findByEmail(email);
+        if(!voter.isPresent()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        Optional<Candidates> candidate=candidatesRepo.findByRegisterNumber(voter.get().getProfile().getRegisterNumber());
+
+        if(!pic_id.isBlank()){
+            Map data=cloudinaryImageService.deleteFile(pic_id);
+        }
+        Map data=cloudinaryImageService.upload(file);
+        voter.get().setProfilePicUrl((String)data.get("url"));
+        voter.get().setProficePicId((String)data.get("public_id"));
+        Voters savedVoter=votersRepo.save(voter.get());
+        if(candidate.isPresent()){
+            candidate.get().setProfilePicUrl(voter.get().getProfilePicUrl());
+            Candidates savedCandidate=candidatesRepo.save(candidate.get());
+        }
+        RegisteredVoterResponse registeredVoterResponse=RegisteredVoterResponse
+        .builder()
+        .email(email)
+        .firstName(savedVoter.getFirstName())
+        .lastName(savedVoter.getLastName())
+        .mobileNumber(savedVoter.getMobileNumber())
+        .profilePicUrl(savedVoter.getProfilePicUrl())
+        .proficePicId(savedVoter.getProficePicId())
+        .role(savedVoter.getRole().toString())
+        .registerNumber(savedVoter.getProfile().getRegisterNumber())
+        .department(savedVoter.getProfile().getDepartment())
+        .build();
+        return registeredVoterResponse;
+    }
+
+
+    @Transactional
+    public RegisteredVoterResponse updateProfile(UpdateUserDto profile) throws AuthenticationException, IllegalArgumentException, IllegalAccessException {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null){
+            throw new AuthenticationException("Unauthenticated");
+        }
+        VoterUserPrinciples principal=(VoterUserPrinciples)authentication.getPrincipal();
+        String email=principal.getEmail();
+        Optional<Voters> voterOpt=votersRepo.findByEmail(email);
+        if(!voterOpt.isPresent()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        Voters voter = voterOpt.get(); // Get the actual voter entity
+        String regNo = voter.getProfile().getRegisterNumber() != null ? voter.getProfile().getRegisterNumber() : null;
+
+// Only attempt to find a candidate if the registration number is not null
+        Optional<Candidates> candidate = Optional.empty();
+        if (regNo != null) {
+            candidate = candidatesRepo.findByRegisterNumber(regNo);
+        }
+    // Only update fields if they have changed
+    if (profile.getFirstName() != null && !profile.getFirstName().equals(voter.getFirstName())) {
+        voter.setFirstName(profile.getFirstName());
+        if(candidate.isPresent()){
+            candidate.get().setFirstname(profile.getFirstName());
+        }
+    }
+    if (profile.getLastName() != null && !profile.getLastName().equals(voter.getLastName())) {
+        voter.setLastName(profile.getLastName());
+        if(candidate.isPresent()){
+            candidate.get().setLastName(profile.getLastName());
+        }
+    }
+    if (profile.getMobileNumber() != null && !profile.getMobileNumber().equals(voter.getMobileNumber())) {
+        voter.setMobileNumber(profile.getMobileNumber());
+    }
+    if (profile.getDepartment() != null && !profile.getDepartment().equals(voter.getProfile().getDepartment())) {
+        voter.getProfile().setDepartment(profile.getDepartment());
+        if(candidate.isPresent()){
+            candidate.get().setDepartment(profile.getDepartment());
+        }
+    }
+        Voters savedVoter=votersRepo.save(voterOpt.get());
+        candidate.ifPresent(candidatesRepo::save);
+        RegisteredVoterResponse registeredVoterResponse=RegisteredVoterResponse
+        .builder()
+        .email(email)
+        .firstName(savedVoter.getFirstName())
+        .lastName(savedVoter.getLastName())
+        .mobileNumber(savedVoter.getMobileNumber())
+        .profilePicUrl(savedVoter.getProfilePicUrl())
+        .proficePicId(savedVoter.getProficePicId())
+        .role(savedVoter.getRole().toString())
+        .registerNumber(savedVoter.getProfile().getRegisterNumber())
+        .department(savedVoter.getProfile().getDepartment())
+        .build();
+        return registeredVoterResponse;
+    }
+
+
+
+    public RegisteredVoterResponse updatePassword(String oldPassword, String newPassword) throws AuthenticationException {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null){
+            throw new AuthenticationException("Unauthenticated");
+        }
+        VoterUserPrinciples principal=(VoterUserPrinciples)authentication.getPrincipal();
+        String email=principal.getEmail();
+        Optional<Voters> voterOpt=votersRepo.findByEmail(email);
+        if(!voterOpt.isPresent()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        Voters voter = voterOpt.get(); 
+        Authentication authentication2=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(principal, oldPassword));
+        if(authentication2==null){
+            throw new AuthenticationException("Incorrect Password");
+        }
+        String updatingPassword=bCryptPasswordEncoder.encode(newPassword);
+        voter.setPassword(updatingPassword);
+        Voters updatedPassword=votersRepo.save(voter);
+        return modelMapper.map(updatedPassword, RegisteredVoterResponse.class);
     }
 }

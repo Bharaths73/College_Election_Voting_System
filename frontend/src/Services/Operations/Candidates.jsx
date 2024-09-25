@@ -77,7 +77,7 @@ export const confirmCandidate=async(token,data)=>{
         console.log("Is a candidate ",response.data.data);
         if(response){
             result=response.data.data
-            result.profilePicUrl=result.profilePicUrl ? result.profilePicUrl : `https://api.dicebear.com/5.x/initials/svg?seed=${result.firstName} ${result.lastName}`
+            result.profilePic=result.profilePic ? result.profilePic : `https://api.dicebear.com/5.x/initials/svg?seed=${result.firstName} ${result.lastName}`
         }
     } catch (error) {
         console.log("Failed to check if you are candidate ",error);
