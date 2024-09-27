@@ -84,12 +84,6 @@ public class AdminController {
         return new ResponseEntity<>(positions,HttpStatus.OK);
     }
 
-    @DeleteMapping("/candidate/{id}")
-    public ResponseEntity<?> deleteCandidate(@PathVariable String id) throws Exception{
-        votersService.deleteCandidate(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping("/dashboard")
     public ResponseEntity<?> getDashboardDetails() throws Exception{
         AdminDashBoardDto dashboard=adminService.getDashboardDetails();
@@ -154,12 +148,6 @@ public class AdminController {
     @PostMapping("/start_or_stop")
     public ResponseEntity<StrartOrStopElectionDto> startOrStopElection(@RequestBody StrartOrStopElectionDto strartOrStopElectionDto) throws Exception{
         StrartOrStopElectionDto electionDto=adminService.startOrStopElection(strartOrStopElectionDto);
-            return new ResponseEntity<>(electionDto,HttpStatus.OK);
-    } 
-
-    @GetMapping("/status")
-    public ResponseEntity<StrartOrStopElectionDto> checkStatus() throws Exception{
-        StrartOrStopElectionDto electionDto=adminService.checkStatus();
             return new ResponseEntity<>(electionDto,HttpStatus.OK);
     } 
 

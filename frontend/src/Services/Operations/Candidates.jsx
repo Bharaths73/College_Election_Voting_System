@@ -114,7 +114,7 @@ export const deleteCand=async(token,id)=>{
         toast.success("Candidate deleted successfully")
     } catch (error) {
         console.log("Failed to delete candidate try again ",error);
-        toast.error("Failed to delete candidate try again ",error.response.data.error)
+        toast.error("Failed to delete candidate try again ")
     }
     toast.dismiss(toastId)
 }

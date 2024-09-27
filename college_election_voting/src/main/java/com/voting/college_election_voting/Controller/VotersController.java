@@ -24,6 +24,7 @@ import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
+import com.voting.college_election_voting.DTO.StrartOrStopElectionDto;
 import com.voting.college_election_voting.DTO.UpdateUserDto;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
@@ -144,5 +145,12 @@ public class VotersController {
         RegisteredVoterResponse voterRegisterDto=votersService.updatePassword(oldPassword,newPassword);
         return new ResponseEntity<>(voterRegisterDto,HttpStatus.OK);
     }
+
+    @GetMapping("/status")
+    public ResponseEntity<StrartOrStopElectionDto> checkStatus() throws Exception{
+        StrartOrStopElectionDto electionDto=votersService.checkStatus();
+            return new ResponseEntity<>(electionDto,HttpStatus.OK);
+    } 
+    
     
 }

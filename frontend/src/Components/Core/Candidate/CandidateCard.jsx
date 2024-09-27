@@ -3,7 +3,7 @@ import Profile from '../../../assets/Profile.jpg'
 import { deleteCand } from '../../../Services/Operations/Candidates';
 import { useSelector } from 'react-redux';
 
-export default function CandidateCard({candidate,setConfirmationModal,setIsCandidate}) {
+export default function CandidateCard({candidate,setConfirmationModal,setIsCandidate,active}) {
     const {token,user}=useSelector(state=>state.authentication)
 
     const deleteCandidate=async(id)=>{
@@ -38,16 +38,20 @@ export default function CandidateCard({candidate,setConfirmationModal,setIsCandi
                 <p>{candidate?.position?.positionName}</p>
             </div>
         </div>
-        <button className='bg-red-400 px-3 mt-2 py-2 rounded-md hover:bg-red-600 text-white text-lg' onClick={()=>setConfirmationModal({
-                            text1:"Are You Sure?",
-                            text2:`You will be no more a candidate`,
-                            btn1name:'Submit',
-                            btn2name:"Cancel",
-                            btn1Handler:()=>deleteCandidate(candidate?.registerNumber),
-                            btn2Handler:()=>setConfirmationModal(null)
-                        })}>
-            Withdraw
-        </button>
+        {
+            !active && (
+                <button className='bg-red-400 px-3 mt-2 py-2 rounded-md hover:bg-red-600 text-white text-lg' onClick={()=>setConfirmationModal({
+                    text1:"Are You Sure?",
+                    text2:`You will be no more a candidate`,
+                    btn1name:'Submit',
+                    btn2name:"Cancel",
+                    btn1Handler:()=>deleteCandidate(candidate?.registerNumber),
+                    btn2Handler:()=>setConfirmationModal(null)
+                })}>
+    Withdraw
+</button>
+            )
+        }
     </div>
   )
 }

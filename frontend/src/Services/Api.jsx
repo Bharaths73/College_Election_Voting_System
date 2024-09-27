@@ -10,7 +10,7 @@ export const AuthApi={
 }
 
 export const electionApi={
-    ELECTION_STATUS:BASE_URL+"/admin/status",
+    ELECTION_STATUS:BASE_URL+"/voter/status",
     UPDATE_ELECTION_STATUS:BASE_URL+"/admin/start_or_stop"
 }
 
@@ -19,7 +19,7 @@ export const candidateApi={
     CANDID_API:BASE_URL+"/voter/candid",
     IS_CANDIDATE_API:BASE_URL+"/voter/iscandidate",
     CANDIDATE_API:BASE_URL+"/voter/candidate",
-    DELETE_CANDIDATE_API:BASE_URL+"/admin/candidate",
+    DELETE_CANDIDATE_API:BASE_URL+"/voter/candidate",
     RESET_CANDIDATE_API:BASE_URL+"/admin/resetCandidates",
     SEARCH_CANDIDATE_API:BASE_URL+"/voter/search_candidate",
 }

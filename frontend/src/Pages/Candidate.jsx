@@ -6,6 +6,7 @@ import { positionApi } from '../Services/Api';
 import { getAllPositions } from '../Services/Operations/Positions';
 import toast from 'react-hot-toast';
 import ConfirmationModal from '../Components/Common/ConfirmationModal';
+import { getElectionActiveStatus } from '../Services/Operations/Election';
 
 export default function Candidate() {
   const [isCandidate,setIsCandidate]=useState(false);
@@ -13,6 +14,7 @@ export default function Candidate() {
   const [loading,setLoading]=useState(false)
   const[positions,setPositions]=useState([])
   const {token,user}=useSelector(state=>state.authentication)
+  const[isActive,setIsActive]=useState(false)
   const [register,setRegister]=useState(
     {
       email:user.email || "",
@@ -85,10 +87,19 @@ export default function Candidate() {
     }
   }
 
+  const getElectionStatus=async()=>{
+    const result=await getElectionActiveStatus(token);
+    if(result){
+      setIsActive(result?.startOrStop)
+    }
+    return result?.startOrStop
+  }
+
   useEffect(()=>{
     const fetchData = async () => {
-      await isACandidate();  // Check if the user is a candidate
-      await getPositions();  // Get available positions
+        await isACandidate();  // Check if the user is a candidate
+        await getPositions();
+        await getElectionStatus()
     };
   
     fetchData();
@@ -103,7 +114,7 @@ export default function Candidate() {
            <div className=' flex flex-col gap-5 justify-center'>
               <p className='sm:text-4xl text-2xl text-slate-600'>Thank you for registering as candidate</p>
               <div className='flex justify-center mt-5'>
-                 <CandidateCard candidate={candidateDetails} setConfirmationModal={setConfirmationModal} setIsCandidate={setIsCandidate}/>
+                 <CandidateCard candidate={candidateDetails} setConfirmationModal={setConfirmationModal} setIsCandidate={setIsCandidate} active={isActive}/>
               </div>
            </div>
          ) : (

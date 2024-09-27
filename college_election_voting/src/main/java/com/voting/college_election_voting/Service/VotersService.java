@@ -22,6 +22,7 @@ import com.voting.college_election_voting.DTO.GetVotersDto;
 import com.voting.college_election_voting.DTO.OTPDto;
 import com.voting.college_election_voting.DTO.PositionsDto;
 import com.voting.college_election_voting.DTO.RegisteredVoterResponse;
+import com.voting.college_election_voting.DTO.StrartOrStopElectionDto;
 import com.voting.college_election_voting.DTO.UpdateUserDto;
 import com.voting.college_election_voting.DTO.VoterLoginDto;
 import com.voting.college_election_voting.DTO.VoterRegisterDto;
@@ -31,6 +32,7 @@ import com.voting.college_election_voting.Model.OTP;
 import com.voting.college_election_voting.Model.Positions;
 import com.voting.college_election_voting.Model.Profile;
 import com.voting.college_election_voting.Model.Role;
+import com.voting.college_election_voting.Model.StrartOrStopElection;
 import com.voting.college_election_voting.Model.Students;
 import com.voting.college_election_voting.Model.Voters;
 import com.voting.college_election_voting.Model.Votes;
@@ -38,6 +40,7 @@ import com.voting.college_election_voting.Repository.CandidatesRepo;
 import com.voting.college_election_voting.Repository.OTPRepo;
 import com.voting.college_election_voting.Repository.PositionsRepo;
 import com.voting.college_election_voting.Repository.ProfileRepo;
+import com.voting.college_election_voting.Repository.StrartOrStopElectionRepo;
 import com.voting.college_election_voting.Repository.StudentRepo;
 import com.voting.college_election_voting.Repository.VotersRepo;
 import com.voting.college_election_voting.Repository.VotesRepo;
@@ -79,6 +82,9 @@ public class VotersService {
 
     @Autowired
     private ProfileRepo profileRepo;
+
+    @Autowired
+    private StrartOrStopElectionRepo strartOrStopElectionRepo;
 
     public VotersService(VotersRepo votersRepo,StudentRepo studentRepo,EmailService emailService,OTPRepo otpRepo,ModelMapper modelMapper,CloudinaryImageService cloudinaryImageService, AuthenticationManager authenticationManager,JWTService jwtService,CandidatesRepo candidatesRepo,PositionsRepo positionsRepo,VotesRepo votesRepo) {
         this.votersRepo = votersRepo;
@@ -596,4 +602,14 @@ public class VotersService {
         Voters updatedPassword=votersRepo.save(voter);
         return modelMapper.map(updatedPassword, RegisteredVoterResponse.class);
     }
+
+    public StrartOrStopElectionDto checkStatus() {
+        List<StrartOrStopElection> isElectionActive=strartOrStopElectionRepo.findAll();
+       if(isElectionActive.size()!=0){
+        StrartOrStopElection strartOrStopElection=isElectionActive.get(0);
+        return modelMapper.map(strartOrStopElection,StrartOrStopElectionDto.class);
+       }
+       return StrartOrStopElectionDto.builder().startOrStop(false).build();
+    }
+    
 }
