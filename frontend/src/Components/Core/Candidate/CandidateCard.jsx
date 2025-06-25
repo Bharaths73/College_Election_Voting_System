@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Profile from '../../../assets/Profile.jpg'
 import { deleteCand } from '../../../Services/Operations/Candidates';
 import { useSelector } from 'react-redux';
 
