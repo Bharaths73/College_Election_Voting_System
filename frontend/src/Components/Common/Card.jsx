@@ -1,7 +1,6 @@
 import React from 'react';
 import { MdDeleteForever,MdModeEditOutline } from "react-icons/md";
 import { useSelector } from 'react-redux';
-import {Link} from 'react-router-dom';
 
 export default function Card({collection,identity,edit,deleteFunc,setConfirmationModal,setModal}) {
     const {role}=useSelector(state=>state.authentication)

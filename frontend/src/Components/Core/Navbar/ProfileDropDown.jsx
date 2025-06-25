@@ -1,5 +1,4 @@
 import React from 'react'
-import profile from '../../../assets/profile.jpg';
 import { GrLogout } from "react-icons/gr";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import React from 'react'
-import Profile from '../../../assets/Profile.jpg'
+import Profile from '../../../assets/profile.jpg'
 import arrow from '../../../assets/arrow.webp'
 
 export default function VotesCard({collection,identity}) {

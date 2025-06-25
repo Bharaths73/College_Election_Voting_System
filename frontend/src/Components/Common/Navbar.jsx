@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosArrowDown } from "react-icons/io";
-import bmsccm_logo from '../../assets/bmsccm_logo.png';
-import profile from '../../assets/profile.jpg';
 import ProfileDropDown from '../Core/Navbar/ProfileDropDown';
-import { Sidebar } from '../Dashboard/Sidebar';
 import {useSelector,useDispatch} from 'react-redux';
 import { setDisplaySidebar } from '../../Redux/Slices/SidebarSlice';
 const COLLEGE_NAME=import.meta.env.VITE_COLLEGE_NAME;
