@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root@123
+      POSTGRES_DB: college_election
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - election-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d college_election"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  backend:
+    build: ./college_election_voting
+    container_name: springboot-app
+    env_file:
+      - ./college_election_voting/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - election-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build: ./frontend
+    container_name: react-app
+    ports:
+      - "3000:80"
+    environment:
+      VITE_API_URL: /api
+      VITE_COLLEGE_NAME: BMS College of Commerce and Management
+      VITE_COLLEGE_LOGO: https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_1350/https://www.skillcode.in/wp-content/uploads/2020/04/bmsccm_logo.png
+    restart: always
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - election-network
+
+volumes:
+  postgres-data:
+
+networks:
+  election-network:
+    driver: bridge

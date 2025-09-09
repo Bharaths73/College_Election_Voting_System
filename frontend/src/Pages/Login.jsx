@@ -51,7 +51,7 @@ export default function Login() {
                 <input type='password' placeholder='Enter Your Password' value={loginData.password} onChange={changeHandler} name='password' id='password' className='sm:w-96 py-2 px-3 border-2 border-gray-400 rounded-md'/>
             </div>
 
-            <Link to='/' className='text-blue-500 hover:text-red-400'>forgot password</Link>
+            {/* <Link to='/' className='text-blue-500 hover:text-red-400'>forgot password</Link> */}
 
             <button className='bg-blue-500 px-2 py-2 rounded-md hover:bg-blue-400 text-white text-lg'>
                 Login

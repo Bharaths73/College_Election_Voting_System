@@ -19,17 +19,14 @@ public interface VotersRepo extends JpaRepository<Voters,Integer>{
     @Query("SELECT v FROM Voters v JOIN v.profile p WHERE p.registerNumber = :regNo")
     Optional<Voters> findByRegisterNumber(@Param("regNo") String regNo);
 
-    @Transactional
     @Query("DELETE FROM Voters v WHERE v.profile.registerNumber= :regNo")
     @Modifying
     void deleteVoterByRegisterNumber(@Param("regNo") String regNo);
 
-    @Transactional
     @Query("DELETE FROM Profile v WHERE v.registerNumber= :regNo")
     @Modifying
     void deleteProfileByRegisterNumber(@Param("regNo") String regNo);
 
-    @Transactional
     @Query("DELETE FROM Votes v WHERE v.voter.id= :id")
     @Modifying
     void deleteVotesById(@Param("id") Integer id);

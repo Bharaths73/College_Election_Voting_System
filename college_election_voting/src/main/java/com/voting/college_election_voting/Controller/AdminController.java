@@ -1,5 +1,6 @@
 package com.voting.college_election_voting.Controller;
 
+import com.voting.college_election_voting.Response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class AdminController {
     public ResponseEntity<?> login(@RequestBody @Valid VoterLoginDto loginDto) throws Exception{
         System.out.println("Admin controller");
         RegisteredVoterResponse adminRegisteredDto=votersService.login(loginDto);
-        return new ResponseEntity<>(adminRegisteredDto,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(adminRegisteredDto).build(),HttpStatus.OK);
     }
 
     @PostMapping("/profile")
@@ -63,37 +64,37 @@ public class AdminController {
     public ResponseEntity<?> profile(@RequestBody VoterRegisterDto registerDto) throws Exception{
         String email=registerDto.getEmail();
         AdminRegisteredDto details=adminService.getDetails(email);
-        return new ResponseEntity<>(details,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(details).build(),HttpStatus.OK);
     }
 
     @GetMapping("/voters")
     public ResponseEntity<?> getVoters(@RequestParam(required = false,defaultValue = "0") Integer pageNo,@RequestParam(required = false,defaultValue = "10") Integer pageSize,@RequestParam(required = false,defaultValue = "profile.registerNumber") String sortBy){
        List<GetVotersDto> voters=adminService.getAllVoters(pageNo,pageSize,sortBy);
-       return new ResponseEntity<>(voters,HttpStatus.OK);
+       return new ResponseEntity<>(ApiResponse.builder().data(voters).build(),HttpStatus.OK);
     }
 
     @PostMapping("/position")
     public ResponseEntity<?> addPosition(@RequestBody PositionsDto position) throws Exception{
         PositionsDto positionsDto=adminService.addPosition(position);
-        return new ResponseEntity<>(positionsDto,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(positionsDto).build(),HttpStatus.OK);
     }
 
     @DeleteMapping("/position/{id}")
     public ResponseEntity<?> deletePosition(@PathVariable Integer id) throws Exception{
         List<PositionsDto> positions=adminService.deletePosition(id);
-        return new ResponseEntity<>(positions,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(positions).build(),HttpStatus.OK);
     }
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> getDashboardDetails() throws Exception{
         AdminDashBoardDto dashboard=adminService.getDashboardDetails();
-        return new ResponseEntity<>(dashboard,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(dashboard).build(),HttpStatus.OK);
     }
 
     @GetMapping("/votes")
     public ResponseEntity<?> getAllVotes(@RequestParam(required = false,defaultValue = "0") Integer pageNo,@RequestParam(required = false,defaultValue = "10") Integer pageSize,@RequestParam(required = false,defaultValue = "id") String sortBy) throws Exception{
         List<VotesDto> votes=adminService.getAllVotes(pageNo,pageSize,sortBy);
-        return new ResponseEntity<>(votes,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(votes).build(),HttpStatus.OK);
     }
 
     @DeleteMapping("/voters/{regNo}")
@@ -130,25 +131,24 @@ public class AdminController {
     @PutMapping("/position")
     public ResponseEntity<?> editPosition(@RequestBody PositionsDto positionsDto) throws Exception{
         PositionsDto position=adminService.editPosition(positionsDto);
-        return new ResponseEntity<>(position,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(position).build(),HttpStatus.OK);
     }
 
     @GetMapping("/search_voter/{query}")
     public ResponseEntity<?> searchVoter(@PathVariable String query) throws Exception{
         GetVotersDto voter=adminService.searchVoter(query);
-        return new ResponseEntity<>(voter,HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.builder().data(voter).build(),HttpStatus.OK);
     }
 
     @PostMapping("/sendOtp")
-    public ResponseEntity<VoterRegisterDto> sendOtp(@RequestBody @Valid AdminOtpDto admin) throws Exception{
-            votersService.sendOTPToAdmin(admin);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> sendOtp(@RequestBody @Valid AdminOtpDto admin) throws Exception{
+            return new ResponseEntity<>(           ApiResponse.builder().data(votersService.sendOTPToAdmin(admin)).build(),HttpStatus.OK);
     } 
 
     @PostMapping("/start_or_stop")
-    public ResponseEntity<StrartOrStopElectionDto> startOrStopElection(@RequestBody StrartOrStopElectionDto strartOrStopElectionDto) throws Exception{
+    public ResponseEntity<?> startOrStopElection(@RequestBody StrartOrStopElectionDto strartOrStopElectionDto) throws Exception{
         StrartOrStopElectionDto electionDto=adminService.startOrStopElection(strartOrStopElectionDto);
-            return new ResponseEntity<>(electionDto,HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponse.builder().data(electionDto).build(),HttpStatus.OK);
     } 
 
 }

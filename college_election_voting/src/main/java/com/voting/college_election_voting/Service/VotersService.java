@@ -139,7 +139,7 @@ public class VotersService {
         otpRepo.delete(otp);
     }
 
-    public void sendOTP(OTPDto voter) throws Exception{
+    public OTP sendOTP(OTPDto voter) throws Exception{
 
         Optional<Voters> DbVoter=votersRepo.findByRegisterNumber(voter.getRegisterNumber());
         Optional<Students> students=studentRepo.findByRegisterNumber(voter.getRegisterNumber());
@@ -153,33 +153,30 @@ public class VotersService {
         if(!students.get().getEmail().equals(voter.getEmail())){
             throw new Exception("Email is not registered in college database");
         }
-        else{
             String email=voter.getEmail();
-            checkInDb(email);
-        }
+            OTP savedOtp=checkInDb(email);
+            return savedOtp;
     }
 
-    public void sendOTPToAdmin(AdminOtpDto admin) throws Exception{
+    public OTP sendOTPToAdmin(AdminOtpDto admin) throws Exception{
 
         Optional<Voters> DbVoter=votersRepo.findByEmail(admin.getEmail());
 
         if(DbVoter.isPresent()){
             throw new Exception("Email is already Registered");
         }
-
-        else{
             String email=admin.getEmail();
-            checkInDb(email);
-        }
+            return checkInDb(email);
     }
 
-    private void checkInDb(String email) throws Exception{
+    private OTP checkInDb(String email) throws Exception{
             String otp=generateOTP();
             Optional<OTP> existingOtp=otpRepo.findByEmail(email);
+            OTP savedOtp=null;
             if(existingOtp.isPresent()){
                 OTP updatedOtp=existingOtp.get();
                 updatedOtp.setOtp(otp);
-                otpRepo.save(updatedOtp);
+                savedOtp=otpRepo.save(updatedOtp);
             }
             else{
                 OTP newOtp=new OTP();
@@ -187,9 +184,10 @@ public class VotersService {
                 newOtp.setOtp(otp);
                 newOtp.setCreatedAt(LocalDateTime.now());
                 newOtp.setExpiresAt(LocalDateTime.now().plusMinutes(30));
-                otpRepo.save(newOtp);
+                savedOtp=otpRepo.save(newOtp);
             }
             sendMail(email,otp);
+            return savedOtp;
     }
 
     private void sendMail(String to,String otp) throws Exception{
@@ -438,6 +436,7 @@ public class VotersService {
         return votes.stream().map(vote->VotingDto.builder().candidate(vote.getCandidate().getFirstname()+" "+vote.getCandidate().getLastName()).position(modelMapper.map(vote.getPosition(), PositionsDto.class)).build()).collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteCandidate(String id) throws Exception{
         Candidates candidate=candidatesRepo.findByRegisterNumber(id).orElseThrow(()->new Exception("Candidate not found to delete"));
         candidatesRepo.deleteByRegisterNumber(id);

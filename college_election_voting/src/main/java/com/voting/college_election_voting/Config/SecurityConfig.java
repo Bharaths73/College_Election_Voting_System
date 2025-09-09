@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
 
@@ -31,9 +32,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.voting.college_election_voting.Filter.JWTFilter;
 import com.voting.college_election_voting.Filter.JwtAuthenticationEntryPoint;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableWebMvc
 public class SecurityConfig {
 
     @Autowired
@@ -45,15 +48,16 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    @Order(1)
+    public static final String[] PUBLIC_URLS={};
+
     @Bean
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception{
         return http.csrf(customizor->customizor.disable())
-                    .authorizeHttpRequests(req->req.requestMatchers(HttpMethod.OPTIONS).permitAll().requestMatchers("/api/admin/login","/api/admin/register","/api/voter/sendOtp","/api/admin/sendOtp","/api/voter/login","/api/voter/register")
+                    .authorizeHttpRequests(req->req.requestMatchers(HttpMethod.OPTIONS).permitAll().requestMatchers("/api/admin/login","/api/admin/register","/api/voter/sendOtp","/api/admin/sendOtp","/api/voter/login","/api/voter/register","/v3/api-docs/**","/v2/api-docs","/swagger-resources/**","/swagger-ui/**","/webjars/**","/actuator/health")
                     .permitAll().requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .anyRequest()
                     .authenticated())
-                    // .exceptionHandling(auth->auth.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                     .exceptionHandling(auth->auth.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                     // .httpBasic(Customizer.withDefaults())
                     .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -63,7 +67,6 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        System.out.println("Admin auth provider");
         DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder());
         provider.setUserDetailsService(userDetailsService);

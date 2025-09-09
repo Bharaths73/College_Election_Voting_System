@@ -1,5 +1,6 @@
 package com.voting.college_election_voting.Service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class JWTService {
-    private final String SECRET="5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+
+    @Value("${jwt.secret}")
+    private String SECRET;
 
     public String generateToken(UserDetails user,String identity){
         Map<String,Object> claims=new HashMap<>();

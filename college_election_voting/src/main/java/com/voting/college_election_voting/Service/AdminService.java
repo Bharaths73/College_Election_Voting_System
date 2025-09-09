@@ -279,13 +279,5 @@ public class AdminService {
         
     }
 
-    public StrartOrStopElectionDto checkStatus() {
-        List<StrartOrStopElection> isElectionActive=strartOrStopElectionRepo.findAll();
-       if(isElectionActive.size()!=0){
-        StrartOrStopElection strartOrStopElection=isElectionActive.get(0);
-        return modelMapper.map(strartOrStopElection,StrartOrStopElectionDto.class);
-       }
-       return StrartOrStopElectionDto.builder().startOrStop(false).build();
-    }
     
 }
