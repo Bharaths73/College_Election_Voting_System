@@ -1,0 +1,38 @@
+@Library("Shared") _
+pipeline{
+    agent any
+    stages{
+        stage("greet"){
+            steps{
+                script{
+                    Hello("Bharath");
+                }
+            }
+        }
+        // stage("code"){
+        //     steps{
+        //         echo "This is cloning stage"
+        //         git url: "https://github.com/Bharaths73/College_Election_Voting_System.git", branch: 'main'
+        //     }
+        // }
+        // stage("build"){
+        //     steps{
+        //         dir("frontend"){
+        //             echo "Docker build stage"
+        //             sh "docker build -t bharaths73/voting-frontend:latest ."
+        //         }
+        //     }
+        // }
+        // stage("push"){
+        //     steps{
+        //         echo "Pushing to docker hub"
+        //         withCredentials([usernamePassword('credentialsId':"Docker-Hub-Cred",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+        //         sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+        //         sh "docker push ${env.dockerHubUser}/voting-frontend:latest"
+        //         }
+        //     }
+        }
+        // stage("deploy"){
+            
+        // }
+    }
