@@ -1,4 +1,3 @@
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/a9d14d35-d54b-4616-8c5a-00ec7adac5c1" />
 # College Election Voting System
 
 This College Election Voting System is a full-stack application designed to manage and conduct elections in a college setting. The system features two interfaces, one for Admin and one for Students (Voters), with role-based access and secure authentication.
