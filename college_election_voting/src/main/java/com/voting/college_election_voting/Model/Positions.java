@@ -27,6 +27,12 @@ public class Positions {
     private Integer id;
     private String positionName;
 
+//    🎯 Relationship Type
+//    If a candidate can stand for only one position:
+//    Position (1)  --------  (Many) Candidates
+//    So:
+//    One Position → Many Candidates
+//    One Candidate → Exactly One Position //bidirectional relationship
     @OneToMany(mappedBy = "position",cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Candidates> candidates;

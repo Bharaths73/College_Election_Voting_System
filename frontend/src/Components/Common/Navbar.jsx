@@ -30,15 +30,15 @@ export default function Navbar() {
   }, []);
 
   return (
-       <div className='w-full flex flex-col bg-blue-500 fixed'>
-      <div className='w-full flex flex-row justify-between items-center h-14 py-8 ml-5'>
-        <div className='flex items-center gap-7'>
+       <div className='site-navbar w-full flex flex-col bg-blue-500 fixed'>
+      <div className='navbar-inner w-full flex flex-row justify-between items-center h-14 py-8 ml-5'>
+        <div className='navbar-brand flex items-center gap-7'>
           {
              token && (
-              <RxHamburgerMenu className='text-4xl font-bold cursor-pointer transition-all' onClick={()=>dispatch(setDisplaySidebar())}/>
+              <RxHamburgerMenu className='navbar-menu-icon text-4xl font-bold cursor-pointer transition-all' onClick={()=>dispatch(setDisplaySidebar())}/>
              )
           }
-          <div className='flex gap-2 items-center' >
+          <div className='brand-lockup flex gap-2 items-center' >
             <img src={COLLEGE_LOGO} className='sm:w-14 sm:h-14 w-12 h-12'/>
             {
               windowWidth > 850 ? (
@@ -52,13 +52,13 @@ export default function Navbar() {
 
         {
            token && (
-            <div className='flex sm:px-16 px-10 items-center gap-2 relative group-last:'>
+            <div className='navbar-profile flex sm:px-16 px-10 items-center gap-2 relative group-last:'>
             <img src={user.profilePicUrl} className='sm:w-[2.7em] sm:h-[2.8em] w-[2.5em] h-[2.5em] border-blue-500 rounded-full' loading='lazy'/>
             <div className='flex items-center gap-1'>
               {
                 windowWidth > 850 && (<p className='sm:text-lg text-base'>{user.firstName}</p>)
               }
-              <IoIosArrowDown className='text-2xl  font-bold cursor-pointer' onClick={()=>setProfileDisplay(!profileDisplay)}/>
+              <IoIosArrowDown className='profile-chevron text-2xl  font-bold cursor-pointer' onClick={()=>setProfileDisplay(!profileDisplay)}/>
             </div>
   
             

@@ -67,13 +67,11 @@ public class AdminService {
 
 
     // public AdminRegisteredDto login(AdminLoginDto loginDto) throws Exception {
-    //     System.out.println("Admin service");
     //     Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getIdentity(), loginDto.getPassword()));
 
     //     // if(!authentication.isAuthenticated()){
     //     //     throw new Exception("Failed to authenticate");
     //     // }
-    //     //  // System.out.println("Admin authenticated");
     //     //  AdminUserPrinciple adminUserPrinciple=(AdminUserPrinciple) authentication.getPrincipal();
 
     //     //  String token=jwtService.generateToken(adminUserPrinciple, loginDto.getIdentity());
@@ -125,16 +123,12 @@ public class AdminService {
             hasPreviousPage(voters.hasPrevious()).build()
         ).collect(Collectors.toList());
 
-        List<Voters> dummy=voters.getContent();
-        dummy.forEach(voter->System.out.println(voter.getRole()));
-        System.out.println(voterRegisterDtos.toString());
         return voterRegisterDtos;
     }
 
 
 
     public PositionsDto addPosition(PositionsDto position) throws Exception {
-        System.out.println("Request position is "+position.toString());
         if(position.getPositionName().isBlank()){
             throw new Exception("Position name cannot be blank");
         }
@@ -144,7 +138,6 @@ public class AdminService {
             throw new Exception("Position already exists");
         }
         Positions positions=modelMapper.map(position, Positions.class);
-        System.out.println(positions.toString());
         positions.setPositionName(positions.getPositionName().trim());
         Positions savedPosition=positionsRepo.save(positions);
         

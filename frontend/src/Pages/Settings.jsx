@@ -45,7 +45,6 @@ export default function Settings() {
         dispatch(uploadFileToBackend(formData,token,user?.proficePicId))
       }
       catch(err){
-        console.log("Failed to update profile picture");
       }
       setLoading(false)
     }
@@ -63,7 +62,6 @@ export default function Settings() {
 
     const onSubmitHandler=async(data)=>{
       const currentValue=getValues()
-      console.log("values are ",currentValue);
       if(isFormEdited()){
         const formData=new FormData()
         const profile={}
@@ -107,11 +105,14 @@ const currentValue=getValues()
     },[])
 
   return (
-    <div className='ml-5 mr-5 pb-10'>
-      <div className='text-black flex flex-col mx-auto gap-10'>
-        <h1 className='font-semibold text-2xl'>Edit Profile</h1>
+    <div className='settings-page ml-5 mr-5 pb-10'>
+      <div className='settings-inner text-black flex flex-col mx-auto gap-10'>
+        <div className='page-heading'>
+          <span className='page-eyebrow'>Account preferences</span>
+          <h1 className='font-semibold text-2xl'>Edit Profile</h1>
+        </div>
 
-        <div className='flex bg-blue-200 rounded-md justify-between px-8'>
+        <div className='settings-photo-card flex bg-blue-200 rounded-md justify-between px-8'>
             <div className='flex items-center gap-x-5  py-8'>
                 <img src={`${tempFile}`} alt={`${user?.firstName}`} className='aspect-square w-[78px] rounded-full'/>
                 <div className='flex flex-col gap-y-2'>
@@ -119,13 +120,13 @@ const currentValue=getValues()
                    <div className='flex items-center gap-3 flex-row'>
                     <label htmlFor='profilePic' className='bg-blue-500 md:py-2 py-1.5 md:px-4 px-3 text-white rounded-md cursor-pointer md:text-lg text-sm'>Select</label>
                      <input type='file' name='profilePic' id='profilePic' className='hidden' onChange={(e)=>{tempFileHandler(e)}}/>
-                     <button onClick={()=>{uploadFile()}} className=' border border-black md:py-2 py-1 md:px-4 px-1 rounded-md flex gap-2 items-center text-black md:text-lg text-sm' >{loading? "Uploading..." : 'upload'} {<MdOutlineFileUpload className='md:text-lg text-sm'/>}</button>
+                     <button onClick={()=>{uploadFile()}} className='action-button action-button-secondary border border-black md:py-2 py-1 md:px-4 px-1 rounded-md flex gap-2 items-center text-black md:text-lg text-sm' >{loading? "Uploading..." : 'upload'} {<MdOutlineFileUpload className='md:text-lg text-sm'/>}</button>
                    </div>
                 </div>
             </div>
         </div>
 
-        <div className='flex flex-col bg-blue-200 rounded-md px-8 py-5'>
+        <div className='settings-form-card flex flex-col bg-blue-200 rounded-md px-8 py-5'>
         <form onSubmit={handleSubmit(onSubmitHandler)} >
           <p className='font-semibold text-xl'>Profile Information</p>
           <div className='flex gap-x-10 mt-5 items-center md:flex-row flex-col max-w-full md:gap-y-0 gap-y-3'>
@@ -172,7 +173,7 @@ const currentValue=getValues()
                 <div className='flex flex-col gap-y-1 flex-1 w-full'>
                 <label>Department</label>
                   <select className='w-full py-2 px-3 rounded-md' defaultValue="MCA"  {...register("department",{required:true})}>
-                                <option selected disabled>Select</option>
+                                <option disabled>Select</option>
                                 {
                                     Department.map((dept,index)=>(
                                         <option value={dept.name} key={index}>{dept.name}</option>
@@ -185,7 +186,7 @@ const currentValue=getValues()
           </div>
 
           <div className='flex items-center justify-end mt-7'>
-          <button className='text-white bg-blue-500 px-4 py-2 rounded-md'>Save</button>
+          <button className='action-button action-button-primary text-white bg-blue-500 px-4 py-2 rounded-md'>Save</button>
           </div>
         </form>
         </div>

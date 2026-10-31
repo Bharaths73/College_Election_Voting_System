@@ -18,7 +18,7 @@ export default function ProfileDropDown({profileDisplay}) {
         {
             profileDisplay && 
             (
-              <div className='bg-white float-end top-[100%] right-2 absolute p-4 z-40 flex-col border-2 border-gray-400  rounded-md '>
+              <div className='profile-dropdown bg-white float-end top-[100%] right-2 absolute p-4 z-40 flex-col border-2 border-gray-400  rounded-md '>
             <div></div>
 
             <div className='flex gap-5 items-center'>
@@ -42,7 +42,7 @@ export default function ProfileDropDown({profileDisplay}) {
             </div>
 
             <hr className='mt-5 mb-2'/>         
-              <button onClick={logoutHandler} className='flex gap-2 items-center cursor-pointer'>
+              <button onClick={logoutHandler} className='logout-button flex gap-2 items-center cursor-pointer'>
                 <GrLogout className='text-xl'/>
                 Logout
               </button>

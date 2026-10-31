@@ -54,7 +54,6 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid VoterLoginDto loginDto) throws Exception{
-        System.out.println("Admin controller");
         RegisteredVoterResponse adminRegisteredDto=votersService.login(loginDto);
         return new ResponseEntity<>(ApiResponse.builder().data(adminRegisteredDto).build(),HttpStatus.OK);
     }
@@ -142,7 +141,7 @@ public class AdminController {
 
     @PostMapping("/sendOtp")
     public ResponseEntity<?> sendOtp(@RequestBody @Valid AdminOtpDto admin) throws Exception{
-            return new ResponseEntity<>(           ApiResponse.builder().data(votersService.sendOTPToAdmin(admin)).build(),HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponse.builder().data(votersService.sendOTPToAdmin(admin)).build(),HttpStatus.OK);
     } 
 
     @PostMapping("/start_or_stop")

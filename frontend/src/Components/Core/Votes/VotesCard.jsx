@@ -4,27 +4,56 @@ import arrow from '../../../assets/arrow.webp'
 
 export default function VotesCard({collection,identity}) {
   return (
-    <div className='flex flex-row items-center border border-slate-400 p-3 rounded-lg bg-slate-300 justify-between gap-x-2'>
-        <div className='flex flex-col gap-y-2 items-center border border-slate-400 p-3 rounded-xl bg-orange-100'>
-            <img src={Profile} className=' w-16 h-16 rounded-full' loading='lazy'/>
-            <div className='flex flex-col items-start gap-1 text-xs font-semibold'>
-                <p className='break-all'>{collection?.voter?.firstName+" "+collection?.voter?.lastName}</p>
-                <p className='break-all'>{collection.voter.profile.registerNumber}</p>
-                <p className='break-all'>{collection.voter.profile.department}</p>
+    <article className='vote-record'>
+        <div className='vote-record-person vote-voter'>
+            <div className='vote-record-heading'>
+                <img src={Profile} loading='lazy' alt=''/>
+                <div>
+                    <span className='vote-record-role'>Name</span>
+                    <h2>{collection?.voter?.firstName+" "+collection?.voter?.lastName}</h2>
+                </div>
             </div>
+            <dl className='vote-record-details'>
+                <div className='vote-record-detail'>
+                    <dt>Register number</dt>
+                    <dd>{collection.voter.profile.registerNumber}</dd>
+                </div>
+                <div className='vote-record-detail'>
+                    <dt>Department</dt>
+                    <dd>{collection.voter.profile.department}</dd>
+                </div>
+            </dl>
         </div>
 
-        <img src={arrow} className='w-6 h-6'/>
-
-        <div className='flex flex-col gap-y-2 items-center border border-slate-400 p-3 rounded-xl bg-blue-300'>
-            <img src={Profile} className='w-16 h-16 rounded-full' loading='lazy'/>
-            <div className='flex flex-col items-start gap-1 text-xs font-semibold'>
-                <p className='break-all'>{collection.candidate.firstname+" "+collection.candidate.lastName}</p>
-                <p className='break-all'>{collection.candidate.registerNumber}</p>
-                <p className='break-all'>{collection.candidate.department}</p>
-                <p className='break-all'>{collection.candidate.position.positionName}</p>
-            </div>
+        <div className='vote-record-connector' aria-hidden='true'>
+            <span/>
+            <img src={arrow}/>
+            <span/>
         </div>
-    </div>
+
+        <div className='vote-record-person vote-candidate'>
+            <div className='vote-record-heading'>
+                <img src={Profile} loading='lazy' alt=''/>
+                <div>
+                    <span className='vote-record-role'>Name</span>
+                    <h2>{collection.candidate.firstname+" "+collection.candidate.lastName}</h2>
+                </div>
+            </div>
+            <dl className='vote-record-details'>
+                <div className='vote-record-detail'>
+                    <dt>Register number</dt>
+                    <dd>{collection.candidate.registerNumber}</dd>
+                </div>
+                <div className='vote-record-detail'>
+                    <dt>Department</dt>
+                    <dd>{collection.candidate.department}</dd>
+                </div>
+                <div className='vote-record-detail'>
+                    <dt>Position</dt>
+                    <dd>{collection.candidate.position.positionName}</dd>
+                </div>
+            </dl>
+        </div>
+    </article>
   )
 }

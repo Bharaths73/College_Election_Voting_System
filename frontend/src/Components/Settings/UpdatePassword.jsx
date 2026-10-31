@@ -26,7 +26,7 @@ export default function UpdatePassword() {
     }
 
   return (
-    <div className='flex flex-col bg-blue-200 rounded-md px-8 py-5'>
+    <div className='password-card flex flex-col bg-blue-200 rounded-md px-8 py-5'>
           <form onSubmit={handleSubmit(submitHandler)}>
             <p className='font-semibold text-xl'>Update Password</p>
             <div className='flex gap-x-4 mt-5 lg:flex-row flex-col lg:gap-y-0 gap-y-3'>
@@ -61,7 +61,7 @@ export default function UpdatePassword() {
             </div>
             </div>
             <div className='flex items-center justify-end mt-7'>
-              <button className='text-white bg-blue-500 px-4 py-2 rounded-md'>Save</button>
+              <button className='action-button action-button-primary text-white bg-blue-500 px-4 py-2 rounded-md'>Save</button>
             </div>
           </form>
         </div>

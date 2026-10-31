@@ -3,13 +3,15 @@ import { useSelector } from 'react-redux'
 
 export default function Profile() {
   const {user,role}=useSelector(state=>state.authentication)
-  console.log("user details ",user);
   
   return (
-    <div>
-      <div className='ml-5 mr-5 pb-10'>
-        <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Profile</h1>
-        <div className='mt-10 bg-blue-200 py-7 px-7 rounded-lg shadow-lg'>
+    <div className='profile-page'>
+      <div className='profile-page-inner ml-5 mr-5 pb-10'>
+        <div className='page-heading'>
+          <span className='page-eyebrow'>Your account</span>
+          <h1 className='text-slate-700 font-semibold text-3xl font-mono mt-4 mb-4'>Profile</h1>
+        </div>
+        <div className='profile-hero mt-10 bg-blue-200 py-7 px-7 rounded-lg shadow-lg'>
            <div className='flex flex-row gap-8 items-center'>
               <img src={user.profilePicUrl} width={100} height={100} className='rounded-lg' loading="lazy"/>
               <div className='flex flex-col gap-1'>
@@ -23,8 +25,8 @@ export default function Profile() {
            </div>
         </div>
 
-        <div className='mt-10 bg-blue-200 pt-7 pb-10 px-10 rounded-lg shadow-lg'>
-        <p className='text-slate-950 font-semibold text-xl italic mt-4 mb-5 underline'>Personal Details</p>
+        <div className='profile-details mt-10 bg-blue-200 pt-7 pb-10 px-10 rounded-lg shadow-lg'>
+        <p className='section-title text-slate-950 font-semibold text-xl italic mt-4 mb-5 underline'>Personal Details</p>
 
            <div className='grid sm:grid-cols-2 grids-cols-1 gap-7 mt-6'>
               <div className='flex flex-col gap-0.5'>

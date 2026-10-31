@@ -2,7 +2,6 @@ package com.voting.college_election_voting.Filter;
 
 import java.io.IOException;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.*;
 @Component
-@Slf4j
 public class JWTFilter extends OncePerRequestFilter{
 
     private JWTService jwtService;
@@ -64,9 +62,6 @@ public class JWTFilter extends OncePerRequestFilter{
                     return;
                 }
 
-        System.out.println("JwtFilter intercepting path: " + request.getServletPath());
-                log.info("JwtFilter intercepting path: " ,request.getServletPath());
-
         String authToken=request.getHeader("Authorization");
                 String token=null;
                 String username=null;
@@ -83,8 +78,6 @@ public class JWTFilter extends OncePerRequestFilter{
 
                 if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
                     UserDetails userdetails;
-                    String role = jwtService.extractUserRole(token); 
-                    System.out.println(role);
                     userdetails=userDetailsService.loadUserByUsername(username);
 
                     if(jwtService.validateToken(token,userdetails)){

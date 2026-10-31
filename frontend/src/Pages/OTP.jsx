@@ -17,7 +17,6 @@ export const OTP=()=>{
             ...registerData,
             otp
         }
-        console.log("user details is ",details);
         
         
         const result=await registerUser(details,navigate,);
@@ -33,9 +32,13 @@ export const OTP=()=>{
 },[])
 
     return(
-        <div className="w-full flex items-center justify-center h-[100vh]">
-            <form  className='flex flex-col gap-7 max-h-max max-w-max bg-gray-100 py-5 pb-10 px-5 border-2 border-gray-400 rounded-xl mb-32 shadow-xl' onSubmit={VerifyDetailsHandler}>
-                <h1 className='text-2xl font-semibold mx-auto'>Enter OTP</h1>
+        <div className="auth-page w-full flex items-center justify-center h-[100vh]">
+            <form  className='auth-card flex flex-col gap-7 max-h-max max-w-max bg-gray-100 py-5 pb-10 px-5 border-2 border-gray-400 rounded-xl mb-32 shadow-xl' onSubmit={VerifyDetailsHandler}>
+                <div className='auth-heading'>
+                  <span className='auth-eyebrow'>Secure verification</span>
+                  <h1 className='text-2xl font-semibold mx-auto'>Verify your email</h1>
+                  <p>Enter the six-digit code sent to your email address.</p>
+                </div>
                 <OTPInput
                 value={otp}
                 onChange={setOtp}
@@ -59,7 +62,7 @@ export const OTP=()=>{
                   }}
                 />
                 <button type="submit"
-              className="w-full bg-yellow-400 py-[12px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900">Verify Email</button>
+              className="auth-submit w-full bg-yellow-400 py-[12px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900">Verify Email</button>
             </form>
         </div>
     )

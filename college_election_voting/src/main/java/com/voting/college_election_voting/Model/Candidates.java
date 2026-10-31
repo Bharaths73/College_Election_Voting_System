@@ -29,6 +29,11 @@ public class Candidates {
     private String Department;
     private String profilePicUrl;
 
+//    🎯 Rule You Defined
+//1 candidate can stand for only 1 position.
+//    That means:
+//    Each candidate row stores one position_id
+//    But a position can have many candidates means many candidates can stand for same position
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonManagedReference
     private Positions position;

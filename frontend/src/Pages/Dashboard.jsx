@@ -24,14 +24,14 @@ export default function Dashboard() {
   }, []);
 
   return (
-      <div className='md:flex gap-5 w-[100vw] static'>
+      <div className='dashboard-layout md:flex gap-5 w-[100vw] static'>
         {
           display &&
           (
             <Sidebar/>
           )
         }
-        <div className={`h-[100vh] mt-5  ${display && windowWidth > 800 ? 'md:ml-[220px] w-[calc(100%-220px)]' : ' w-full'} absolute top-16 -z-10`}>
+        <div className={`dashboard-content ${display && windowWidth > 800 ? 'dashboard-sidebar-open md:ml-[220px] w-[calc(100%-220px)]' : display ? 'dashboard-sidebar-mobile-open' : 'dashboard-sidebar-closed w-full'} h-[100vh] mt-5 absolute top-16 -z-10`}>
           <Outlet/>
       </div>
       </div> 

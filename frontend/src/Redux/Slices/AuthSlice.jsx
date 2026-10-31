@@ -7,8 +7,7 @@ function decodeJwtToken(token){
         try {
           const decoded = jwtDecode(token);
           return decoded.role
-        } catch (error) {
-          console.error('Invalid token', error);
+        } catch {
           return null;
         }
       }
@@ -22,8 +21,6 @@ const initialState={
     role: token!==null ? decodeJwtToken(token) : null,
     user : localStorage.getItem("user") ? (JSON.parse(localStorage.getItem("user"))):null
 }
-
-console.log(initialState.role);
 
 
 const AuthSlice=createSlice({

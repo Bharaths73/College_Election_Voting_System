@@ -14,7 +14,6 @@ export default function Login() {
        identity:"",
        password:""
   })
-  console.log("role is ",role);
   
 
   function changeHandler(e){
@@ -38,9 +37,13 @@ export default function Login() {
   }
 
   return (
-    <div className='w-full flex items-center justify-center h-[100vh]'>
-        <form className='flex flex-col gap-7 max-h-max max-w-max bg-gray-100 py-5 pb-10 px-5 border-2 border-gray-400 rounded-xl mb-32 shadow-xl' onSubmit={loginAuth}>
-            <h1 className='font-semibold text-4xl mx-auto text-gray-700'>Login</h1>
+    <div className='auth-page w-full flex items-center justify-center h-[100vh]'>
+        <form className='auth-card flex flex-col gap-7 max-h-max max-w-max bg-gray-100 py-5 pb-10 px-5 border-2 border-gray-400 rounded-xl mb-32 shadow-xl' onSubmit={loginAuth}>
+            <div className='auth-heading'>
+              <span className='auth-eyebrow'>BMS College of Commerce & Management</span>
+              <h1 className='font-semibold text-4xl mx-auto text-gray-700'>Welcome back</h1>
+              <p>Sign in to continue to your election portal.</p>
+            </div>
             <div className='flex flex-col gap-1'>
                 {/* <label htmlFor='registerNo' className='text-black text-2xl font-semibold'>Register Number</label> */}
                 <input type='text' placeholder="Enter Your Email" value={loginData.identity} onChange={changeHandler} name='identity' id='identity' className='sm:w-96 w-72 py-2 px-3 border-2 border-gray-400 rounded-md'/>
@@ -53,11 +56,11 @@ export default function Login() {
 
             {/* <Link to='/' className='text-blue-500 hover:text-red-400'>forgot password</Link> */}
 
-            <button className='bg-blue-500 px-2 py-2 rounded-md hover:bg-blue-400 text-white text-lg'>
+            <button className='auth-submit bg-blue-500 px-2 py-2 rounded-md hover:bg-blue-400 text-white text-lg'>
                 Login
             </button>
 
-            <div className='flex gap-1'>
+            <div className='auth-switch flex gap-1'>
                <p>New User?</p>
                <Link to={`${adminSegment ? '/admin/register' : '/register'}`} className='text-blue-600 hover:text-red-400'>Register here</Link>
             </div>

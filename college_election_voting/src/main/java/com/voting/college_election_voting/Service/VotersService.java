@@ -105,7 +105,6 @@ public class VotersService {
 
     @Transactional
     public RegisteredVoterResponse register(VoterRegisterDto voter) throws Exception{
-        System.out.println("Profile Success");
         Optional<Voters> DbVoter=votersRepo.findByRegisterNumber(voter.getProfile().getRegisterNumber());
         Optional<OTP> otp=otpRepo.findByEmail(voter.getEmail());
         if(DbVoter.isPresent()){

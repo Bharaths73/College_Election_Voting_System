@@ -7,13 +7,11 @@ export const getDashboardDetails=async(token)=>{
     const toastId=toast.loading("Getting Dashboard Details...")
     try {
         const response=await ApiConnector("GET",dashboardApi.DASHBOARD_API,null,{Authorization:`Bearer ${token}`})
-        console.log("dashboard details are ",response.data.data);
         if(response){
             result=response.data.data
         }
         toast.success("Fetched All Details")
     } catch (error) {
-        console.log("Failed to details ",error);
         toast.error("Failed to details")
     }
     toast.dismiss(toastId)
