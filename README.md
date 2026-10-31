@@ -1,4 +1,4 @@
-
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/a9d14d35-d54b-4616-8c5a-00ec7adac5c1" />
 # College Election Voting System
 
 This College Election Voting System is a full-stack application designed to manage and conduct elections in a college setting. The system features two interfaces, one for Admin and one for Students (Voters), with role-based access and secure authentication.
@@ -32,28 +32,27 @@ This College Election Voting System is a full-stack application designed to mana
 
 
 ## Screenshots
+<img width="1920" height="1200" alt="Screenshot (62)" src="https://github.com/user-attachments/assets/63bcb630-eb76-415d-8b41-07dbc23459b4" />
 
-![Screenshot (229)](https://github.com/user-attachments/assets/0661241c-f59b-405f-a5b7-c6dc8b1822a0)
+<img width="1920" height="1200" alt="Screenshot (63)" src="https://github.com/user-attachments/assets/15c0a8b4-784e-460c-82bf-95af6dca0b75" />
 
-![Screenshot (231)](https://github.com/user-attachments/assets/3b56ffc3-a3cf-49fa-8cd9-164b690f72dc)
+<img width="1920" height="1200" alt="Screenshot (64)" src="https://github.com/user-attachments/assets/b5eda915-97e4-4c03-b06b-fe4f86a3aa8d" />
 
-![Screenshot (232)](https://github.com/user-attachments/assets/aea26dea-01a0-49fe-87c6-4d9d3da1b819)
+<img width="1920" height="1200" alt="Screenshot (65)" src="https://github.com/user-attachments/assets/de2815db-5d37-4861-8387-b0c4463a7fa9" />
 
-![Screenshot (233)](https://github.com/user-attachments/assets/9003de0a-bc62-4015-a259-e87e3ff42549)
+<img width="1920" height="1200" alt="Screenshot (66)" src="https://github.com/user-attachments/assets/84f640d0-3a5b-40c2-960a-db1c6825fc18" />
 
-![Screenshot (234)](https://github.com/user-attachments/assets/ab729f78-56ee-49bc-aece-eac5a27c77d8)
+<img width="1920" height="1200" alt="Screenshot (67)" src="https://github.com/user-attachments/assets/e471a908-44e1-464e-82c8-a8873ee0d0e9" />
 
-![Screenshot (235)](https://github.com/user-attachments/assets/fb028f93-921f-41cd-b066-b4c8724817f2)
+<img width="1920" height="1200" alt="Screenshot (68)" src="https://github.com/user-attachments/assets/a0b3f3f6-55f8-4a67-b001-4c511191a5ef" />
 
-![Screenshot (236)](https://github.com/user-attachments/assets/9b8ae71c-ab02-446b-97f8-1869bdf5b26b)
+<img width="1920" height="1200" alt="Screenshot (69)" src="https://github.com/user-attachments/assets/e9022809-823c-47ab-90c1-5904353613ca" />
 
-![Screenshot (237)](https://github.com/user-attachments/assets/360d52bc-4a41-4122-ac82-f4899f72324f)
+<img width="1920" height="1200" alt="Screenshot (70)" src="https://github.com/user-attachments/assets/662c3876-1cb1-46e7-b696-a3caf5bee88b" />
 
-![Screenshot (238)](https://github.com/user-attachments/assets/df79c138-c36c-47c4-8977-1d03a386ea76)
+<img width="1920" height="1200" alt="Screenshot (71)" src="https://github.com/user-attachments/assets/ba28a4a4-40b8-4d2c-97f7-2cfbc90234d0" />
 
-![Screenshot (239)](https://github.com/user-attachments/assets/62153221-e3c4-4977-ab6e-ab12f11d15e6)
-
-![Screenshot (240)](https://github.com/user-attachments/assets/3c576936-7cd8-4dc8-8eb1-51a6ea27fba3)
+<img width="1920" height="1200" alt="Screenshot (72)" src="https://github.com/user-attachments/assets/4dea0994-1e34-4e8b-9b57-ea00355ef035" />
 
 
 ## Run Locally
